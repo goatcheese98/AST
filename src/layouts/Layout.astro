@@ -1,22 +1,83 @@
+--- 
+interface Props {
+    title?: string;
+    isHomePage?: boolean;
+}
+
+const { title = 'Default Recipe App Title', isHomePage = false } = Astro.props;
+---
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{title}</title>
+
+		<!-- Import global SCSS styles -->
+		<link rel="stylesheet" href="../styles/main.scss" />
+
+		<script>
+			// You can add global client-side scripts here if needed
+			// For example, to handle theme switching or other global logic
+			console.log('Global layout script loaded.');
+		</script>
 	</head>
 	<body>
-		<slot />
+		{/* Basic Header Example - Conditionally Rendered */}
+        {!isHomePage && (
+            <header class="site-header">
+                <nav>
+                    <a href="/">Home</a>
+                    <a href="/test-page">Test Page</a>
+                    <a href="/style-tests">Style Tests</a>
+                    <a href="/gsap-tests">GSAP Tests</a>
+                    {/* Add more navigation links as needed */}
+                </nav>
+            </header>
+        )}
+
+		<main id="main-content">
+			<slot /> {/* Page content will be injected here */}
+		</main>
+
+		{/* Basic Footer Example */}
+		<footer class="site-footer">
+			<p>&copy; {new Date().getFullYear()} GenRec Project. All rights reserved.</p>
+		</footer>
+
+		<style is:global>
+			/* Minimal global styles for structure - most styling should come from SCSS */
+			body {
+				display: flex;
+				flex-direction: column;
+				min-height: 100vh;
+				margin: 0; /* Reset default margin */
+				font-family: sans-serif; /* A very basic default */
+			}
+
+			#main-content {
+				flex-grow: 1;
+				padding: 1rem; /* Add some padding around the main content */
+			}
+
+			.site-header, .site-footer {
+				background-color: #f0f0f0; /* Light grey background for header/footer */
+				padding: 1rem;
+				text-align: center;
+			}
+
+			.site-header nav a {
+				margin: 0 10px;
+				text-decoration: none;
+				color: #333;
+			}
+
+			.site-header nav a:hover {
+				text-decoration: underline;
+			}
+		</style>
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

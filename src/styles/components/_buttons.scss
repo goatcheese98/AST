@@ -1,0 +1,73 @@
+// Component styles: Buttons 
+
+.btn {
+  display: inline-block;
+  font-family: $font-secondary; // Or $font-primary if you prefer for buttons
+  font-weight: 700; // Quicksand bold
+  font-size: 1rem;
+  padding: 0.75em 1.5em;
+  border-radius: 2em; // Fun, rounded buttons
+  border: 2px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  line-height: 1;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($color-yellow, 0.5);
+  }
+}
+
+.btn-primary {
+  background-color: $color-orange;
+  color: $color-white;
+  border-color: $color-orange;
+
+  &:hover, &:focus {
+    background-color: $color-dark-orange;
+    border-color: $color-dark-orange;
+    color: $color-white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba($color-black, 0.1);
+  }
+}
+
+.btn-secondary {
+  background-color: $color-yellow;
+  color: $color-black;
+  border-color: $color-yellow;
+
+  &:hover, &:focus {
+    background-color: darken($color-yellow, 10%);
+    border-color: darken($color-yellow, 10%);
+    color: $color-black;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba($color-black, 0.1);
+  }
+}
+
+.btn-outline-black {
+  background-color: transparent;
+  color: $color-black;
+  border-color: $color-black;
+
+  &:hover, &:focus {
+    background-color: $color-black;
+    color: $color-white;
+    transform: translateY(-2px);
+  }
+}
+
+.btn-outline-white {
+  background-color: transparent;
+  color: $color-white;
+  border-color: $color-white;
+
+  &:hover, &:focus {
+    background-color: $color-white;
+    color: $color-black;
+    transform: translateY(-2px);
+  }
+} 

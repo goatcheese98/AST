@@ -1,0 +1,90 @@
+---
+import Layout from '../layouts/Layout.astro';
+import GsapTestBox from '../components/svelte/GsapTestBox.svelte';
+import SandwichStacker from '../components/svelte/SandwichStacker.svelte';
+import DetailedSandwichAssembly from '../components/svelte/DetailedSandwichAssembly.svelte';
+import TopDownSandwichAssembly from '../components/svelte/TopDownSandwichAssembly.svelte';
+
+const pageTitle = "GSAP Animation Tests";
+const description = "Testing GSAP animations within Astro and Svelte.";
+---
+
+<Layout title={pageTitle} description={description} isHomePage={false}>
+  <main class="gsap-test-page">
+    <section class="test-section">
+      <h2>Top-Down Sandwich Assembly</h2>
+      <p>Ingredients appearing and layering from a top-down perspective.</p>
+      <div class="animation-container top-down-animation-container">
+        <TopDownSandwichAssembly client:visible />
+      </div>
+    </section>
+
+    <section class="test-section">
+      <h2>Detailed Sandwich Assembly (Side View)</h2>
+      <p>Ingredients falling and stacking with some physics-like interactions.</p>
+      <div class="animation-container">
+        <DetailedSandwichAssembly client:visible />
+      </div>
+    </section>
+
+    <section class="test-section">
+      <h2>Sandwich Stacker Animation (Side View)</h2>
+      <p>A more complex animation simulating sandwich ingredients falling into place.</p>
+      <div class="animation-container">
+        <SandwichStacker client:visible />
+      </div>
+    </section>
+
+    <section class="test-section">
+      <h2>Simple GSAP Box Animation</h2>
+      <p>This is a basic rotating and scaling box using GSAP directly in a Svelte component.</p>
+      <div class="animation-container">
+        <GsapTestBox client:visible />
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style is:global>
+  .gsap-test-page {
+    padding: var(--space-md);
+    background-color: var(--color-background-alt);
+  }
+
+  .test-section {
+    background-color: var(--color-background);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
+  }
+
+  .test-section h2 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-sm);
+    border-bottom: 2px solid var(--color-accent);
+    padding-bottom: var(--space-xs);
+  }
+
+  .test-section p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-md);
+  }
+
+  .animation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px; /* Ensure space for animations */
+    background-color: var(--color-background-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    padding: var(--space-md);
+    overflow: hidden; /* To contain any wild animations if needed */
+  }
+
+  .top-down-animation-container {
+    min-height: 350px; /* Slightly more space for top-down view if needed */
+    /* background-color: #e9e9e9; ensure it contrasts if component bg is similar */
+  }
+</style> 

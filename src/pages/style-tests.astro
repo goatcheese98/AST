@@ -1,0 +1,293 @@
+---
+import TestIsland from '../components/svelte/TestIsland.svelte';
+import ColorFontTestIsland from '../components/svelte/ColorFontTestIsland.svelte';
+import '../styles/main.scss'; // Import global SCSS
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Style & Component Tests" isHomePage={false}>
+  <main class="container">
+    <div class="page-container">
+      <h1>SCSS Style & Component Showcase</h1>
+
+      <section class="test-section scss-showcase">
+        <h2>SCSS Styles Showcase</h2>
+        <p>This page is styled by <code>main.scss</code>. Body text uses <code>$font-secondary</code> (Quicksand), and headings use <code>$font-primary</code> (Fredoka One) with <code>$color-orange</code> by default (see <code>_typography.scss</code>).</p>
+      </section>
+
+      <section class="test-section text-color-examples">
+        <!-- ... existing text-color-examples content ... -->
+        <h3>Text & Color Styling Examples</h3>
+        <p style="color: #1a1a1a;">Default body text (<code>$color-black</code>: #1a1a1a)</p>
+        <p style="color: #FFA500;">Paragraph with <code>$color-orange</code>: #FFA500</p>
+        <p style="color: #FFD700; background-color: #1a1a1a; padding: 0.5em;">Paragraph with <code>$color-yellow</code> on <code>$color-black</code> background.</p>
+        <p style="color: #FF8C00;">Paragraph with <code>$color-dark-orange</code>: #FF8C00</p>
+        <p style="color: #FFFACD; background-color: #333333; padding: 0.5em;">Paragraph with <code>$color-light-yellow</code> on <code>$color-gray-dark</code> background.</p>
+        <h4 style="color: #FFD700; font-family: 'Fredoka One', cursive, sans-serif;">H4 with $font-primary and $color-yellow</h4>
+        <p style="font-family: 'Quicksand', sans-serif; font-weight: 700;">Quicksand bold text.</p>
+      </section>
+
+      <section class="test-section list-examples">
+        <h3>List Styles Showcase</h3>
+        <h4>Custom Numbered List (Ordered List)</h4>
+        <ol>
+          <li>First item: Make it tasty!</li>
+          <li>Second item: Add a dash of fun.</li>
+          <li>Third item: Don't forget the modern touch.</li>
+          <li>Fourth item with a bit more text to see how it wraps with the custom numbering style and padding.</li>
+        </ol>
+        <h4>Custom Bullet List (Unordered List)</h4>
+        <ul>
+          <li>Yellow bullet point.</li>
+          <li>Another fun item.</li>
+          <li>Modern and clean.</li>
+        </ul>
+      </section>
+
+      <section class="test-section button-examples">
+        <!-- ... existing button-examples content ... -->
+        <h3>Button Styles Showcase</h3>
+        <p>
+          <button type="button" class="btn btn-primary">Primary Button</button>
+          <a href="#" class="btn btn-primary">Primary Link Button</a>
+        </p>
+        <p>
+          <button type="button" class="btn btn-secondary">Secondary Button</button>
+          <a href="#" class="btn btn-secondary">Secondary Link Button</a>
+        </p>
+        <p>
+          <button type="button" class="btn btn-outline-black">Outline Black Button</button>
+          <a href="#" class="btn btn-outline-black">Outline Black Link</a>
+        </p>
+        <div style="background-color: #1a1a1a; padding: 1em; border-radius: 8px; margin-top:1em;">
+          <button type="button" class="btn btn-outline-white">Outline White Button</button>
+          <a href="#" class="btn btn-outline-white">Outline White Link</a>
+        </div>
+      </section>
+
+      <section class="test-section dropdown-examples">
+        <h3>Dropdown Styles Showcase (Static Visual)</h3>
+        <div class="dropdown-container">
+          <button type="button" class="dropdown-button">Select Option</button>
+          <ul class="dropdown-menu">
+            <li><a href="#" class="dropdown-item">Option 1: Delicious</a></li>
+            <li><a href="#" class="dropdown-item">Option 2: Appetizing</a></li>
+            <li class="dropdown-divider"></li>
+            <li><a href="#" class="dropdown-item">Option 3: Funky Fresh</a></li>
+          </ul>
+        </div>
+        <div class="dropdown-container">
+          <button type="button" class="dropdown-button btn-secondary">Another Dropdown (Secondary)</button>
+          <ul class="dropdown-menu">
+            <li><a href="#" class="dropdown-item">Item A</a></li>
+            <li><a href="#" class="dropdown-item">Item B: A longer item name</a></li>
+            <li><a href="#" class="dropdown-item">Item C</a></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="test-section card-examples">
+        <!-- ... existing card-examples content ... -->
+        <h3>Card Styles Showcase</h3>
+        <div class="card">
+          <h4 class="card-title">Standard Card</h4>
+          <div class="card-content">
+            <p>This is a standard card. It uses <code>$color-white</code> background and has a subtle shadow. The title uses <code>$font-primary</code>.</p>
+            <button type="button" class="btn btn-primary">Action</button>
+          </div>
+        </div>
+        <div class="card card-highlight-yellow">
+          <h4 class="card-title">Yellow Highlight Card</h4>
+          <div class="card-content">
+            <p>This card has a yellow left border for emphasis. Useful for callouts or warnings.</p>
+            <button type="button" class="btn btn-secondary">More Info</button>
+          </div>
+        </div>
+        <div class="card card-highlight-orange">
+          <h4 class="card-title">Orange Highlight Card</h4>
+          <div class="card-content">
+            <p>This card has an orange left border. Could be used for important notices.</p>
+          </div>
+        </div>
+        <div class="card card-dark-theme">
+          <h4 class="card-title">Dark Theme Card</h4>
+          <div class="card-content">
+            <p>This card demonstrates a dark theme variant, with light text on a dark background. Titles are yellow.</p>
+            <button type="button" class="btn btn-outline-white">Explore</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="test-section todo-examples">
+        <h3>To-Do List Styles Showcase (Static Visual)</h3>
+        <p>Note: The checkmark and trash icons are visual hints for slidable actions.</p>
+        <ul class="todo-list">
+          <li class="todo-item">
+            <span class="todo-checkbox"></span>
+            <span class="todo-text">Brainstorm sandwich names (funky and fresh!)</span>
+          </li>
+          <li class="todo-item todo-item--completed">
+            <span class="todo-checkbox is-checked"></span>
+            <span class="todo-text">Design the color palette (black, yellow, orange, white)</span>
+          </li>
+          <li class="todo-item">
+            <span class="todo-checkbox"></span>
+            <span class="todo-text">Find a hunger-inducing typography.</span>
+          </li>
+           <li class="todo-item">
+            <span class="todo-checkbox"></span>
+            <span class="todo-text">Sketch out initial homepage layout concepts with a focus on modern, fun, and engaging visuals.</span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="test-section ingredient-style-examples">
+        <h3>Creative Ingredient-Inspired Styles</h3>
+        <p>Exploring more abstract and appealing uses of our theme colors.</p>
+        <div class="ingredient-demo-container">
+
+          <div class="demo-rustic-bread">
+            <h4>Artisan Bread Style</h4>
+            <p>Soft off-white with a warm brown crust-like border. Imagine a subtle texture here.</p>
+          </div>
+
+          <div class="demo-fresh-greens-panel">
+            <h4>Fresh Greens Accent</h4>
+            <p>Using our vibrant green for an energetic background, paired with dark text for readability.</p>
+            <button type="button" class="btn btn-outline-white" style="border-color: #1a1a1a; color: #1a1a1a; margin-top:10px;">Button on Green</button>
+          </div>
+
+          <div class="demo-yellow-highlight-block">
+            <h4>Sunny Yellow Block</h4>
+            <p>A block using our <code>$color-yellow</code>, could be for callouts or fun elements.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="test-section svelte-island-examples">
+        <!-- ... existing svelte-island-examples content ... -->
+        <h3>Svelte Island Styling Examples</h3>
+        <p>Default TestIsland (should inherit global styles like font):</p>
+        <TestIsland client:visible />
+        
+        <p>ColorFontTestIsland Instances (inline styles override global):</p>
+        <ColorFontTestIsland 
+          client:visible 
+          textContent="Island: Fredoka One, Orange Text" 
+          fontFamily="'Fredoka One', cursive, sans-serif" 
+          textColor="#FFA500" 
+        />
+        <ColorFontTestIsland 
+          client:visible 
+          textContent="Island: Quicksand, Yellow Text, Larger" 
+          fontFamily="'Quicksand', sans-serif" 
+          textColor="#FFD700" 
+          fontSize="1.2rem"
+        />
+         <ColorFontTestIsland 
+          client:visible 
+          textContent="Island: Quicksand, Black Text (default props)"
+        />
+      </section>
+
+    </div>
+  </main>
+</Layout>
+
+<style is:global>
+  /* ... existing global styles ... */
+  /* These styles are just for this test page to make sections clearer */
+  .page-container {
+    max-width: 900px;
+    margin: 2em auto;
+    padding: 20px;
+  }
+  .test-section {
+    background-color: #fdfdfd; /* Slightly off-white for sections */
+    padding: 2em;
+    margin-bottom: 2.5em;
+    border: 1px solid #eeeeee;
+    border-radius: 12px; /* More rounded sections */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .test-section h2, .test-section h3 {
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+  .test-section h2 {
+    font-family: 'Fredoka One', cursive, sans-serif; /* Ensure section titles use primary font */
+    color: #1a1a1a; /* Default black for main section titles */
+  }
+   .test-section h3 {
+    font-family: 'Fredoka One', cursive, sans-serif; /* Ensure section titles use primary font */
+    color: #333333; /* Darker gray for sub-section titles */
+  }
+  /* Custom classes from previous step, kept for reference if needed */
+  .custom-text-black {
+    color: #1a1a1a; /* $color-black */
+  }
+  .custom-text-yellow-bg {
+    background-color: #FFFACD; /* $color-light-yellow */
+    padding: 0.5em;
+  }
+  .button-examples p,
+  .card-examples .card {
+    margin-bottom: 1em; /* Spacing for button groups and cards */
+  }
+  .button-examples .btn {
+    margin-right: 0.5em; /* Spacing between inline buttons */
+    margin-bottom: 0.5em; /* Spacing for wrapped buttons */
+  }
+  .ingredient-demo-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em; /* Increased gap */
+  }
+
+  .demo-rustic-bread {
+    background-color: #FFFACD; /* $color-light-yellow, for a creamy bread inside */
+    color: #5D4037; /* A darker, earthy brown for text */
+    padding: 1.5em 2em;
+    border: 3px solid #DEB887; /* $color-bread-brown for the crust */
+    border-radius: 10px;
+    box-shadow: 
+      inset 0 0 10px rgba(0,0,0,0.05), /* Subtle inner shadow for depth */
+      0 4px 8px rgba(0,0,0,0.1);    /* Outer shadow for lift */
+  }
+  .demo-rustic-bread h4 {
+    color: #8B4513; /* Simulating $color-patty (original dark brown) for heading */
+    margin-top: 0;
+    font-family: 'Fredoka One', cursive, sans-serif; /* Actual font stack for $font-primary */
+  }
+
+  .demo-fresh-greens-panel {
+    background-color: #7CFC00; /* $color-lettuce-green */
+    color: #1a1a1a; /* $color-black for good contrast on bright green */
+    padding: 1.5em 2em;
+    border-radius: 8px;
+    border: 2px solid darken(#7CFC00, 10%);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+  }
+  .demo-fresh-greens-panel h4 {
+    color: darken(#7CFC00, 30%); /* This SASS function won't work here, use a hex */
+    /* Let's pick a dark green: #006400; */
+    color: #006400; 
+    margin-top: 0;
+    font-family: 'Fredoka One', cursive, sans-serif; /* Actual font stack for $font-primary */
+  }
+  
+  .demo-yellow-highlight-block {
+    background-color: #FFD700; /* $color-yellow */
+    color: #1a1a1a; /* $color-black */
+    padding: 1.5em 2em;
+    border-radius: 8px;
+    text-align: center;
+    border: 2px solid darken(#FFD700, 10%);
+  }
+   .demo-yellow-highlight-block h4 {
+    color: #FFA500; /* Actual hex for $color-orange */
+    margin-top: 0;
+    font-family: 'Fredoka One', cursive, sans-serif; /* Actual font stack for $font-primary */
+  }
+</style>

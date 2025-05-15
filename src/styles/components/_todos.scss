@@ -1,0 +1,98 @@
+// Component styles: To-Do Items
+
+.todo-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5em;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  background-color: $color-white;
+  border: 1px solid $color-gray-light;
+  border-radius: 8px;
+  padding: 1em 1.5em;
+  margin-bottom: 0.75em;
+  box-shadow: 0 2px 4px rgba($color-black, 0.06);
+  transition: box-shadow 0.3s ease;
+  position: relative; // For pseudo-elements if needed for "slidable" hints
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba($color-black, 0.1);
+  }
+
+  // "Slidable" action hints (visual only)
+  // These could be replaced by actual interactive elements in Svelte
+  &::before, &::after {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5em; // Adjust as needed
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+  }
+
+  // Hint for "complete" action on the left
+  &::before {
+    content: '\2713'; // Checkmark unicode
+    left: -2.5em; // Position outside the item, adjust as needed
+    color: $color-orange; 
+  }
+
+  // Hint for "delete" action on the right
+  &::after {
+    content: '\1F5D1'; // Trash can unicode (may need specific font or SVG)
+    right: -2.5em; // Position outside the item, adjust as needed
+    color: $color-gray-medium;
+  }
+  
+  &:hover::before, &:hover::after {
+    opacity: 0.7;
+  }
+}
+
+.todo-item--completed {
+  .todo-text {
+    text-decoration: line-through;
+    color: $color-gray-medium;
+  }
+  // Change appearance of the "complete" hint
+  &::before {
+    opacity: 1;
+    color: darken($color-orange, 10%);
+  }
+}
+
+.todo-checkbox {
+  // Basic styling for a custom-looking checkbox area
+  // In a real app, this would be an actual <input type="checkbox">
+  // or a Svelte component managing state.
+  width: 24px;
+  height: 24px;
+  border: 2px solid $color-orange;
+  border-radius: 50%; // Fun, circular checkbox
+  margin-right: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+
+  // Visual indicator for checked state (static)
+  &.is-checked::after {
+    content: '';
+    display: block;
+    width: 12px;
+    height: 12px;
+    background-color: $color-orange;
+    border-radius: 50%;
+  }
+}
+
+.todo-text {
+  font-family: $font-secondary;
+  color: $color-black;
+  line-height: 1.4;
+  flex-grow: 1;
+} 

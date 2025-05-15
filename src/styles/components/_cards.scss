@@ -1,0 +1,62 @@
+// Component styles: Cards 
+
+.card {
+  background-color: $color-white;
+  border: 1px solid $color-gray-light;
+  border-radius: 12px; // Fun, rounded corners
+  padding: 1.5em;
+  margin-bottom: 1.5em;
+  box-shadow: 0 4px 12px rgba($color-black, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba($color-black, 0.12);
+  }
+
+  .card-title {
+    font-family: $font-primary;
+    font-size: 1.5rem;
+    color: $color-orange;
+    margin-top: 0;
+    margin-bottom: 0.75em;
+  }
+
+  .card-content {
+    font-family: $font-secondary;
+    font-size: 1rem;
+    color: $color-gray-dark;
+    line-height: 1.6;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Card variations
+.card-highlight-yellow {
+  border-left: 5px solid $color-yellow;
+}
+
+.card-highlight-orange {
+  border-left: 5px solid $color-orange;
+}
+
+.card-dark-theme {
+  background-color: $color-black;
+  border-color: $color-gray-dark;
+  color: $color-gray-light; // Default text color for dark card
+
+  .card-title {
+    color: $color-yellow; // Yellow titles on dark card
+  }
+
+  .card-content {
+    color: $color-gray-light;
+  }
+
+   &:hover {
+    box-shadow: 0 8px 20px rgba($color-yellow, 0.15);
+  }
+} 

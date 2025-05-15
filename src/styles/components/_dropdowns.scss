@@ -1,0 +1,77 @@
+// Component styles: Dropdowns
+
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1em; // For spacing in showcase
+}
+
+.dropdown-button {
+  @extend .btn; // Inherit base button styles
+  @extend .btn-primary; // Use primary button styling by default
+  padding-right: 3em; // Space for arrow
+  position: relative;
+
+  &::after {
+    content: '\25BC'; // Downward arrow unicode
+    position: absolute;
+    right: 1em;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8em;
+    pointer-events: none; // So it doesn't interfere with button click
+  }
+}
+
+.dropdown-menu {
+  display: block; // For static showcase; JS would toggle this
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  background-color: $color-white;
+  border: 1px solid $color-gray-light;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba($color-black, 0.15);
+  padding: 0.5em 0;
+  margin-top: 0.25em;
+  min-width: 200px;
+  list-style: none; // Remove default list styling
+
+  // For showcase, ensure it's visible without JS
+  // In a real app, this would be controlled by Svelte state
+  // opacity: 1;
+  // visibility: visible;
+  // transform: translateY(0);
+  // transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+// Styles for when menu is hidden (for potential future Svelte use)
+// .dropdown-menu--hidden {
+//   opacity: 0;
+//   visibility: hidden;
+//   transform: translateY(-10px);
+// }
+
+.dropdown-item {
+  display: block;
+  padding: 0.75em 1.5em;
+  color: $color-black;
+  text-decoration: none;
+  font-family: $font-secondary;
+  font-size: 0.95rem;
+  white-space: nowrap;
+
+  &:hover, &:focus {
+    background-color: $color-light-yellow;
+    color: $color-dark-orange;
+    outline: none;
+  }
+}
+
+.dropdown-divider {
+  height: 1px;
+  margin: 0.5em 0;
+  overflow: hidden;
+  background-color: $color-gray-light;
+} 

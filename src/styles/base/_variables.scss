@@ -1,0 +1,39 @@
+// Base styles: Variables
+
+// Color Palette - GenRec
+// Primary colors for a modern, fun, and hunger-inducing food app
+
+// Theme Colors
+$color-black: #1a1a1a;         // Bright Black for text and dark backgrounds
+$color-yellow: #FFD700;        // Vibrant Yellow for highlights, calls to action
+$color-orange: #FFA500;        // Engaging Orange for accents, buttons
+$color-dark-orange: #FF8C00;   // Darker Orange for secondary accents
+$color-white: #FFFFFF;         // Pure White for backgrounds, text on dark
+$color-light-yellow: #FFFACD;  // Lighter, creamy yellow for backgrounds or subtle highlights
+
+// New Sandwich-Themed Colors
+$color-lettuce-green: #7CFC00; // A bright, fresh green for leafy elements (LawnGreen)
+$color-bread-brown: #DEB887;   // A warm, toasty brown for bread elements (BurlyWood)
+$color-kale-green: #5F8550;    // A muted, earthy green like kale
+
+// More Muted Ingredient-Inspired Colors
+$color-muted-tomato-bg: #C87A79;     // Soft, desaturated red for tomato-inspired backgrounds
+$color-muted-tomato-border: #AE605F; // Darker, desaturated red for borders
+$color-muted-cheese-bg: #F0C070;      // Soft, cheddar/mango like color for cheese-inspired backgrounds
+$color-muted-cheese-border: #D9A954;  // Darker version for borders
+$color-creamy-white: #F5F5DC;         // Beige, like unbleached flour, for alternative bread/light backgrounds
+$color-dark-earthy-text: #5D4037;    // For text on light backgrounds (e.g., bread, cheese)
+
+// Neutral Grays - Keeping original definitions and adding if needed
+$color-gray-light: #f8f9fa;    // Very light gray for subtle backgrounds or borders (standard bootstrap light gray)
+$color-gray: #6c757d;          // Standard gray (Bootstrap default)
+$color-gray-medium: #adb5bd;   // Medium gray (Bootstrap default for secondary text/borders)
+$color-gray-dark: #343a40;     // Dark gray (Bootstrap default)
+$color-gray-xlight: #f9f9f9;  // An extra light gray, almost white
+
+// Accent Colors (derived or complementary)
+$color-dark-orange: #FF8C00;  // Darker orange for emphasis
+
+// Font Families
+$font-primary: 'Fredoka One', cursive, sans-serif; // For headings - playful, bold
+$font-secondary: 'Quicksand', sans-serif;       // For body text - rounded, friendly, modern 
