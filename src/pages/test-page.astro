@@ -1,0 +1,65 @@
+---
+import TestIsland from '../components/svelte/TestIsland.svelte';
+import { fetchRecipes } from '../services/directus.ts';
+
+let recipes = [];
+let fetchError = null;
+
+try {
+  recipes = await fetchRecipes();
+} catch (error) {
+  console.error("Error in test-page.astro:", error);
+  fetchError = error.message || "Failed to load recipes. Check server console for details.";
+}
+---
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>Test Svelte Island & Directus Fetch</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    .error { color: red; border: 1px solid red; padding: 10px; margin-bottom: 20px; }
+    .recipe-list { list-style: none; padding: 0; }
+    .recipe-list li { background: #f9f9f9; border: 1px solid #eee; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the Svelte Island & Directus Test Page!</h1>
+  
+  <h2>Directus Recipe Fetch Test:</h2>
+  {fetchError && (
+    <div class="error">
+      <p><strong>Error fetching recipes:</strong></p>
+      <pre>{fetchError}</pre>
+    </div>
+  )}
+
+  {!fetchError && recipes.length > 0 && (
+    <div>
+      <p>Successfully fetched {recipes.length} recipes!</p>
+      <ul class="recipe-list">
+        {recipes.map(recipe => (
+          <li>
+            <h3>{recipe.title}</h3>
+            {recipe.short_description && <p>{recipe.short_description}</p>}
+            {recipe.slug && <p><small>Slug: {recipe.slug}</small></p>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  {!fetchError && recipes.length === 0 && (
+    <p>No recipes found, or public access might not be configured correctly (or no recipes exist yet).</p>
+  )}
+
+  <hr />
+
+  <h2>Svelte Island Test:</h2>
+  <TestIsland client:visible />
+  
+  <p>The Svelte component above should be interactive if everything is set up correctly.</p>
+</body>
+</html> 
