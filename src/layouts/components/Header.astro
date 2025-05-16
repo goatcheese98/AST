@@ -35,11 +35,18 @@ const { showHeader = true } = Astro.props;
 
     .container {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       max-width: v.$max-width;
       margin: 0 auto;
       padding: 0 v.$spacing-unit * 2; // Consistent with BaseLayout padding
+      gap: v.$spacing-unit * 2; // Add some gap between logo and nav
+
+      // Target .site-navigation, which is the <nav> element from Navigation.astro
+      // This assumes Navigation.astro's root element has the class .site-navigation
+      .site-navigation {
+        flex-grow: 0; // Changed from 1, no longer need to fill space
+      }
     }
 
     .site-branding {
@@ -68,6 +75,12 @@ const { showHeader = true } = Astro.props;
       .container {
         flex-direction: column;
         align-items: flex-start;
+        gap: v.$spacing-unit; // Adjust gap for column layout
+
+        .site-navigation {
+          flex-grow: 0; // Remains 0
+          width: 100%; // Ensure it takes full width in column layout if needed for mobile menu
+        }
       }
     }
     .site-branding {
@@ -85,7 +98,7 @@ const { showHeader = true } = Astro.props;
     color: v.$color-dark-earthy-text; // Artisan bread style text
     cursor: pointer;
     padding: 0.5rem; // Add some padding for easier clicking
-    margin-left: v.$spacing-unit; // Space it from the navigation
+    // margin-left is removed as search-container handles spacing
 
     svg {
       display: block; // Remove extra space below SVG
@@ -100,8 +113,8 @@ const { showHeader = true } = Astro.props;
     // }
   }
 
-  // .logo-container was removed as SandoHubLogo is placed directly
-  // .search-container { // This style rule might be duplicated or incomplete, review context
-  //   display: flex;
-  // }
+  .search-container { 
+    display: flex;
+    margin-left: auto; // Push search to the far right
+  }
 </style> 

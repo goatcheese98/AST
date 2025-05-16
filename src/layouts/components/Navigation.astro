@@ -5,11 +5,7 @@ const navLinks = [
   { href: "/recipes", text: "Recipes" },
   { href: "/blog", text: "Blog" },
   { href: "/about", text: "About" },
-  // For testing, let's add the links from the old Layout.astro for now
-  // We can consolidate these later.
-  { href: "/test-page", text: "Test Page" },
-  { href: "/style-tests", text: "Style Tests" },
-  { href: "/gsap-tests", text: "GSAP Tests" },
+  // Test links removed, will be moved to footer
 ];
 
 const currentPath = Astro.url.pathname;
@@ -62,7 +58,8 @@ const currentPath = Astro.url.pathname;
 
 <style lang="scss">
   @use '../../styles/base/variables' as v;
-  @use '../../styles/utils/mixins' as m; // Restore mixins import
+  @use '../../styles/utils/mixins' as m;
+  @use '../../styles/components/nav-buttons' as nb; // Import the new nav-buttons partial
 
   .site-navigation {
     position: relative; // For positioning the mobile menu dropdown
@@ -113,6 +110,7 @@ const currentPath = Astro.url.pathname;
     margin: 0;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 0.5rem;
 
     li {
@@ -124,45 +122,12 @@ const currentPath = Astro.url.pathname;
     }
 
     a {
-      text-decoration: none;
-      font-family: v.$font-secondary; // Using Quicksand for nav links
-      font-weight: 600; // Slightly bolder for better readability as buttons
-      color: v.$color-dark-earthy-text; // Artisan bread text color for all states initially
-      
-      // "Piece of Bread" default style
-      background-color: v.$color-light-yellow;
-      border: 2px solid v.$color-bread-brown; // Crust
-      padding: 0.7em 1.3em; // Adjusted padding for bread-like feel
-      border-radius: v.$border-radius-md; // Rounded slice corners
-      box-shadow: inset 0 0 4px rgba(v.$color-dark-earthy-text, 0.1); // Subtle inner dimension
-      
-      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-      display: inline-block; 
-      line-height: 1;
-      text-align: center;
+      @include nb.nav-button-theme; // Apply the mixin
 
-      // "Toasting" effect on hover/focus
-      &:hover, &:focus {
-        background-color: v.$color-bread-brown; // Toasted bread background
-        color: v.$color-light-yellow;           // Text color for toasted state
-        border-color: darken(v.$color-bread-brown, 10%); // Slightly darker crust
-        box-shadow: inset 0 0 5px rgba(v.$color-black, 0.2), 0 2px 4px rgba(v.$color-black, 0.15); // Toasted depth + lift
-        text-decoration: none;
-        transform: translateY(-1px); // Slight lift
-      }
-
-      // Active state: Should look like "toasted" bread
-      &.is-active {
-        background-color: v.$color-bread-brown;
-        color: v.$color-light-yellow;
-        border-color: darken(v.$color-bread-brown, 10%);
-        box-shadow: inset 0 0 5px rgba(v.$color-black, 0.2);
-        font-weight: 700; // Keep active distinct
-        transform: none; // No lift for active, it's already selected
-
-        // No separate hover for active, it already looks toasted
-        // If a different hover on active is desired, define it here
-      }
+      // Specific overrides or additions for header nav links if any, can go here
+      // For example, if the active state needs a slightly different box-shadow or font-weight
+      // than what the mixin provides by default for .is-active.
+      // The mixin already includes an .is-active style, so this might not be needed.
     }
   }
 
@@ -189,6 +154,7 @@ const currentPath = Astro.url.pathname;
 
       flex-direction: column;
       align-items: stretch; 
+      justify-content: flex-start;
       gap: 0.5rem;
 
       li {
@@ -196,22 +162,21 @@ const currentPath = Astro.url.pathname;
       }
 
       a {
-        // Mobile links will inherit the new base styles.
-        // Adjust for stacked view
-        padding: 0.8em 1em; 
-        border-radius: v.$border-radius-sm; 
-        box-shadow: inset 0 0 3px rgba(v.$color-dark-earthy-text, 0.05); // Lighter inner shadow for mobile
-        border-width: 1px; // Thinner border for mobile list items
-        margin-bottom: 0.3em; // Space out bread slices in mobile
+        // The mixin is applied, mobile specific tweaks below:
+        padding: 0.8em 1em; // Slightly adjusted padding for stacked view
+        border-radius: v.$border-radius-sm; // Potentially smaller radius for list items
+        box-shadow: inset 0 0 3px rgba(v.$color-dark-earthy-text, 0.05); // Lighter inner shadow
+        border-width: 1px; // Thinner border
+        margin-bottom: 0.3em;
 
         &:hover, &:focus {
-            transform: none; // No lift on mobile hover, keep it simple
-            box-shadow: inset 0 0 4px rgba(v.$color-black, 0.15); // Simpler toasted shadow
+            transform: none; 
+            box-shadow: inset 0 0 4px rgba(v.$color-black, 0.15); 
         }
       }
       
       a.is-active {
-         box-shadow: inset 0 0 4px rgba(v.$color-black, 0.15); // Simpler toasted shadow for active mobile
+         box-shadow: inset 0 0 4px rgba(v.$color-black, 0.15); 
       }
     }
 

@@ -1,194 +1,35 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-// import TopDownSandwichAssembly from '../components/svelte/TopDownSandwichAssembly.svelte'; // Removed
-// Import a new SvgIcon component (to be created)
-// import SvgIcon from '../components/utility/SvgIcon.astro';
-// We might import components later if we make any for the landing page sections
+import HeroSection from '../components/homepage/HeroSection.astro';
+import FeaturedRecipesSection from '../components/homepage/FeaturedRecipesSection.astro';
+import LatestBlogPostsSection from '../components/homepage/LatestBlogPostsSection.astro';
+import CategoryTagsNavigationSection from '../components/homepage/CategoryTagsNavigationSection.astro';
+
+const pageTitle = "Sando Hub - Deliciously Crafted Sandwiches & More!";
+const pageDescription = "Welcome to Sando Hub! Discover unique sandwich recipes, browse our food blog, and find your next favorite meal.";
 ---
 
-<BaseLayout title="GenRec Sandwich Hub - Deliciously Crafted Recipes!" isHomePage={true}>
-	<div class="landing-page">
-		<!-- Hero Section -->
-		<section class="hero-section">
-			<div class="hero-content">
-				<h1 class="hero-title">GenRec Sandwich Hub</h1>
-				<p class="hero-subtitle">Discover unique, mouth-watering sandwich recipes, perfectly tailored to your taste!</p>
-				<a href="/recipes" class="btn btn-primary btn-lg hero-cta">Let's Find Your Sandwich!</a>
-			</div>
-		</section>
-
-		<!-- Why GenRec Section -->
-		<section class="why-genrec-section section-padding">
-			<h2 class="section-title">What Makes Us Special?</h2>
-			<div class="features-grid">
-				<div class="feature-item artisan-card-style" style="background-color: #C87A79; color: #FFFACD; border-color: #AE605F;">
-					<h3 class="feature-title" style="color: #FFFACD;">Creative Combinations</h3>
-					<p>AI-powered recipes that go beyond the ordinary. Fresh ideas daily!</p>
-				</div>
-				<div class="feature-item artisan-card-style" style="background-color: #5F8550; color: #FFFACD; border-color: #4D693F;">
-					<h3 class="feature-title" style="color: #FFFACD;">Kale-Yeah, It's Healthy!</h3>
-					<p>Explore nutritious and delicious options, including vibrant greens and wholesome ingredients.</p>
-				</div>
-				<div class="feature-item artisan-card-style" style="background-color: #F0C070; color: #5D4037; border-color: #D9A954;">
-					<h3 class="feature-title" style="color: #5D4037;">Simply Fun</h3>
-					<p>An easy, playful way to discover, customize, and create your next favorite meal.</p>
-				</div>
-			</div>
-		</section>
-
-		<!-- Featured Categories/CTA Section -->
-		<section class="featured-categories-section section-padding" style="background-color: #f0f4f0;">
-			<h2 class="section-title">Taste The Possibilities</h2>
-			<div class="categories-grid">
-				<div class="category-card artisan-card-style" style="background-color: #F5F5DC; border-color: #b08d57; color: #5D4037;">
-					<h4 class="category-title" style="color: #8B4513;">Hearty Classics</h4>
-					<p>Timeless tastes that always satisfy.</p>
-				</div>
-				<div class="category-card artisan-card-style" style="background-color: #FFD700; border-color: #d8b600; color: #1a1a1a;">
-					<h4 class="category-title" style="color: #1a1a1a;">Green Goodness</h4>
-					<p>Fresh, vibrant, and veggie-packed.</p>
-				</div>
-				<div class="category-card artisan-card-style" style="background-color: #FF8C00; border-color: #d17400; color: #FFFFFF;">
-					<h4 class="category-title" style="color: #FFFFFF;">Bold & Spicy</h4>
-					<p>Turn up the heat with exciting flavors.</p>
-				</div>
-			</div>
-			<div class="cta-container">
-				<a href="/all-recipes" class="btn btn-secondary btn-lg">Explore All Flavors</a>
-			</div>
-		</section>
-
+<BaseLayout title={pageTitle} description={pageDescription} isHomePage={true}>
+	<div class="homepage-content">
+		<HeroSection />
+		<FeaturedRecipesSection />
+		<LatestBlogPostsSection />
+		<CategoryTagsNavigationSection />
 	</div>
 </BaseLayout>
 
-<style>
-	/* General Landing Page Styles */
-	.landing-page {
-		background-color: #FFFFFF;
-	}
-	.section-padding {
-		padding: 4rem 1.5rem;
-	}
-	.section-title {
-		text-align: center;
-		font-size: 2.8rem;
-		font-family: 'Fredoka One', cursive, sans-serif; 
-		color: #333;
-		margin-bottom: 3rem;
+<style lang="scss">
+	// Global styles for the homepage container can go here if needed.
+	// Specific section styles are within their respective components.
+	.homepage-content {
+		// Example: Add some overall padding or max-width if not handled by BaseLayout
+		// For now, let sections manage their own padding.
 	}
 
-	/* Artisan Card Style (Base Shape & Shadow) */
-	.artisan-card-style {
-		background-color: #FFFACD;
-		color: #5D4037;
-		padding: 2em;
-		border: 3px solid #DEB887;
-		border-radius: 18px;
-		box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-		transition: transform 0.3s ease, box-shadow 0.3s ease;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-	}
-	.artisan-card-style:hover {
-		transform: translateY(-5px);
-		box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-	}
-	.artisan-card-style h3, .artisan-card-style h4 {
-		font-family: 'Fredoka One', cursive, sans-serif;
-		margin-top: 0;
-		margin-bottom: 0.85rem;
-		line-height: 1.3;
-	}
-	.artisan-card-style p {
-		font-family: 'Quicksand', sans-serif;
-		font-size: 1.05rem;
-		line-height: 1.65;
-		flex-grow: 1;
-	}
-
-	/* Hero Section */
-	.hero-section {
-		background: #e9f5e9;
-		padding: 5rem 1.5rem;
-		text-align: center;
-	}
-	.hero-content {
-		max-width: 780px;
-		margin: 0 auto;
-		padding: 0;
-	}
-	.hero-title {
-		font-size: 4rem;
-		color: #5F8550;
-		margin-bottom: 1rem;
-	}
-	.hero-subtitle {
-		font-size: 1.5rem;
-		color: #343a40;
-		margin-bottom: 3rem;
-	}
-	.hero-cta {
-		font-size: 1.3rem;
-		padding: 0.9em 2.8em;
-		background-color: #FFA500; 
-		border-color: #FFA500;
-		color: #FFFFFF;
-		font-weight: bold;
-	}
-	.hero-cta:hover {
-		background-color: #FF8C00; 
-		border-color: #FF8C00;
-	}
-
-	/* Why GenRec Section */
-	.features-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 2.5rem;
-		max-width: 1200px;
-		margin: 0 auto;
-	}
-	.feature-item h3 {
-		font-size: 1.9rem;
-	}
-
-	/* Featured Categories Section */
-	.featured-categories-section {
-	}
-	.categories-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 2.5rem;
-		max-width: 1200px;
-		margin: 0 auto 3rem auto;
-	}
-	.category-card {
-		text-align: center;
-	}
-	.category-card .category-title {
-		font-size: 2rem;
-	}
-
-	.cta-container {
-		text-align: center;
-		margin-top: 3.5rem;
-	}
-	.cta-container .btn-secondary {
-		background-color: #5F8550;
-		border-color: #5F8550;
-		color: #FFFACD;
-		padding: 0.8em 2.5em;
-		font-size: 1.1rem;
-		font-weight: bold;
-	}
-	.cta-container .btn-secondary:hover {
-		background-color: #4D693F;
-		border-color: #4D693F;
-	}
-
-	/* Using classes from _cards.scss and _buttons.scss directly */
-	/* We assume these are globally available via main.scss */
-	/* Example: .btn, .btn-primary, .card, .card-highlight-yellow etc. */
-
+	// Any previous styles specific to old sections in index.astro are removed 
+	// as those sections are replaced by the new components.
+	// The styles for .artisan-card-style, .section-padding, .section-title etc. 
+	// might need to be moved to a global stylesheet (e.g., base/_utilities.scss or components/_cards.scss)
+	// or be re-implemented within the new components if they are still desired.
+	// For now, to keep it clean, I am removing them from this page's style block.
 </style>

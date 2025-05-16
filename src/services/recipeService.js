@@ -17,7 +17,7 @@ export async function getAllRecipes(options = {}) {
         '*',
         'main_image.id',
         'categories.categories_id.name', // Assuming junction field 'categories', related field 'categories_id', and 'name' in 'categories' collection
-        'tags.tags_id.name' // Assuming junction field 'tags', related field 'tags_id', and 'name' in 'tags' collection
+        // 'tags.tags_id.name' // Removed: Tags are now a direct array of strings
       ],
       sort: ['-date_published'], // Sort by newest published date
       // filter: { status: { _eq: 'published' } } // Example if you have a status field to filter by
@@ -34,7 +34,8 @@ export async function getAllRecipes(options = {}) {
         ...recipe,
         imageUrl: recipe.main_image ? getAssetURL(recipe.main_image.id || recipe.main_image) : null,
         categories: recipe.categories ? recipe.categories.map(catRel => catRel.categories_id?.name).filter(name => name) : [],
-        tags: recipe.tags ? recipe.tags.map(tagRel => tagRel.tags_id?.name).filter(name => name) : []
+        // tags: recipe.tags ? recipe.tags.map(tagRel => tagRel.tags_id?.name).filter(name => name) : [] // Removed: Tags are now a direct array of strings, no mapping needed if fetched with '*'
+        // tags will be available as recipe.tags directly if the field key is 'tags'
       };
     });
 
