@@ -1,0 +1,32 @@
+// AST/src/styles/base/_base.scss
+
+// Styles migrated from Layout.astro's global style block
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0; // Reset default margin
+  font-family: sans-serif; // A very basic default - consider defining a better base font stack
+  background-color: var(--color-background, #fff); // Example using CSS variables
+  color: var(--color-text, #333);
+  line-height: 1.6;
+}
+
+#main-content {
+  flex-grow: 1;
+  padding: 1rem; // Add some padding around the main content
+  width: 100%; // Ensure it takes full width within its container
+  max-width: var(--content-max-width, 1200px); // Example for constraining content width
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+// Add other base HTML element styling here if needed
+// e.g., a, p, h1-h6 default margins/paddings, etc.
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+} 

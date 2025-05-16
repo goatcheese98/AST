@@ -1,23 +1,18 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import TopDownSandwichAssembly from '../components/svelte/TopDownSandwichAssembly.svelte';
+import BaseLayout from '../layouts/BaseLayout.astro';
+// import TopDownSandwichAssembly from '../components/svelte/TopDownSandwichAssembly.svelte'; // Removed
 // Import a new SvgIcon component (to be created)
 // import SvgIcon from '../components/utility/SvgIcon.astro';
 // We might import components later if we make any for the landing page sections
 ---
 
-<Layout title="GenRec Sandwich Hub - Deliciously Crafted Recipes!" isHomePage={true}>
+<BaseLayout title="GenRec Sandwich Hub - Deliciously Crafted Recipes!" isHomePage={true}>
 	<div class="landing-page">
 		<!-- Hero Section -->
 		<section class="hero-section">
-			<div class="hero-content artisan-card-style" style="background-color: #F5F5DC; border-color: #DEB887; color: #5D4037;">
-				<h1 class="hero-title" style="color: #DEB887;">GenRec Sandwich Hub</h1>
+			<div class="hero-content">
+				<h1 class="hero-title">GenRec Sandwich Hub</h1>
 				<p class="hero-subtitle">Discover unique, mouth-watering sandwich recipes, perfectly tailored to your taste!</p>
-				<div class="hero-image-placeholder">
-					<div class="animation-wrapper">
-						<TopDownSandwichAssembly client:visible />
-					</div>
-				</div>
 				<a href="/recipes" class="btn btn-primary btn-lg hero-cta">Let's Find Your Sandwich!</a>
 			</div>
 		</section>
@@ -49,12 +44,12 @@ import TopDownSandwichAssembly from '../components/svelte/TopDownSandwichAssembl
 					<h4 class="category-title" style="color: #8B4513;">Hearty Classics</h4>
 					<p>Timeless tastes that always satisfy.</p>
 				</div>
-				<div class="category-card artisan-card-style" style="background-color: #5F8550; border-color: #4D693F; color: #FFFACD;">
-					<h4 class="category-title" style="color: #FFFACD;">Green Goodness</h4>
+				<div class="category-card artisan-card-style" style="background-color: #FFD700; border-color: #d8b600; color: #1a1a1a;">
+					<h4 class="category-title" style="color: #1a1a1a;">Green Goodness</h4>
 					<p>Fresh, vibrant, and veggie-packed.</p>
 				</div>
-				<div class="category-card artisan-card-style" style="background-color: #C87A79; border-color: #AE605F; color: #FFFACD;">
-					<h4 class="category-title" style="color: #FFFACD;">Bold & Spicy</h4>
+				<div class="category-card artisan-card-style" style="background-color: #FF8C00; border-color: #d17400; color: #FFFFFF;">
+					<h4 class="category-title" style="color: #FFFFFF;">Bold & Spicy</h4>
 					<p>Turn up the heat with exciting flavors.</p>
 				</div>
 			</div>
@@ -64,7 +59,7 @@ import TopDownSandwichAssembly from '../components/svelte/TopDownSandwichAssembl
 		</section>
 
 	</div>
-</Layout>
+</BaseLayout>
 
 <style>
 	/* General Landing Page Styles */
@@ -115,43 +110,23 @@ import TopDownSandwichAssembly from '../components/svelte/TopDownSandwichAssembl
 	/* Hero Section */
 	.hero-section {
 		background: #e9f5e9;
-		padding: 3rem 1.5rem 4rem;
+		padding: 5rem 1.5rem;
 		text-align: center;
 	}
 	.hero-content {
 		max-width: 780px;
 		margin: 0 auto;
-		padding: 2.5rem !important;
+		padding: 0;
 	}
 	.hero-title {
 		font-size: 4rem;
-		margin-bottom: 0.75rem;
+		color: #5F8550;
+		margin-bottom: 1rem;
 	}
 	.hero-subtitle {
 		font-size: 1.5rem;
-		margin-bottom: 2.5rem;
-	}
-	.hero-image-placeholder {
-		background-color: rgba(222, 184, 135, 0.05); 
-		border: 3px dashed #DEB887; 
-		border-radius: 15px;
-		padding: 1rem;
-		margin: 1.5rem auto 3rem;
-		max-width: 280px;
-		min-height: 280px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		overflow: hidden;
-	}
-	.animation-wrapper {
-		transform: scale(0.75);
-		transform-origin: center center;
-		width: 320px;
-		height: 320px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
+		color: #343a40;
+		margin-bottom: 3rem;
 	}
 	.hero-cta {
 		font-size: 1.3rem;

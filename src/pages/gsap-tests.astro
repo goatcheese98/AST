@@ -1,5 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import GsapTestBox from '../components/svelte/GsapTestBox.svelte';
 import SandwichStacker from '../components/svelte/SandwichStacker.svelte';
 import DetailedSandwichAssembly from '../components/svelte/DetailedSandwichAssembly.svelte';
@@ -9,7 +9,7 @@ const pageTitle = "GSAP Animation Tests";
 const description = "Testing GSAP animations within Astro and Svelte.";
 ---
 
-<Layout title={pageTitle} description={description} isHomePage={false}>
+<BaseLayout title={pageTitle} description={description} isHomePage={false}>
   <main class="gsap-test-page">
     <section class="test-section">
       <h2>Top-Down Sandwich Assembly</h2>
@@ -43,7 +43,7 @@ const description = "Testing GSAP animations within Astro and Svelte.";
       </div>
     </section>
   </main>
-</Layout>
+</BaseLayout>
 
 <style is:global>
   .gsap-test-page {

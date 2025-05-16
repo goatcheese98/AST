@@ -1,0 +1,50 @@
+---
+// src/layouts/components/Footer.astro
+const currentYear = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <p>&copy; {currentYear} GenRec Project. All rights reserved.</p>
+    <!-- You can add more footer content here, like links -->
+    <!-- 
+    <nav class="footer-nav">
+      <a href="/privacy-policy">Privacy Policy</a>
+      <a href="/terms-of-service">Terms of Service</a>
+    </nav> 
+    -->
+  </div>
+</footer>
+
+<style lang="scss">
+  .site-footer {
+    background-color: #f0f0f0; // from Layout.astro .site-footer
+    padding: 1rem 0; // Adjusted padding, original was 1rem
+    text-align: center; // from Layout.astro .site-footer
+    border-top: 1px solid #ddd; // A bit lighter than placeholder
+    color: #333; // Assuming light background means dark text
+    margin-top: auto; // Helps push footer to bottom with flex body
+
+    .container {
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    // Example for footer navigation if added
+    /*
+    .footer-nav {
+      margin-top: 0.5rem;
+      a {
+        margin: 0 10px;
+        text-decoration: none;
+        color: #555;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+    */
+  }
+</style> 

@@ -37,3 +37,26 @@ $color-dark-orange: #FF8C00;  // Darker orange for emphasis
 // Font Families
 $font-primary: 'Fredoka One', cursive, sans-serif; // For headings - playful, bold
 $font-secondary: 'Quicksand', sans-serif;       // For body text - rounded, friendly, modern 
+
+// ======== Theme Variables ========
+
+// -- Dark Theme Base --
+$color-background-primary: $color-black; 
+$color-background-secondary: $color-gray-dark; // For elements like header, footer, cards
+$color-text-primary: $color-gray-light;
+$color-text-secondary: $color-gray-medium;
+$color-border: $color-gray; // For subtle borders
+
+// -- Accent & Interactive --
+$color-accent: $color-yellow;
+$color-accent-dark: $color-orange; // For hover/active states on accents
+
+$color-primary: $color-yellow; // Main interactive color (e.g., for active nav link)
+$color-primary-dark: $color-orange; // Darker shade for primary hover/active
+$color-primary-light-hover: $color-gray-dark; // For non-active nav link hover background
+
+// -- Layout & Spacing --
+$max-width: 1140px;
+$spacing-unit: 1rem;
+$border-radius-sm: 4px;
+$border-radius-md: 8px; 

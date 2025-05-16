@@ -1,1 +1,24 @@
- 
+// Core SCSS files - Variables, Functions, Mixins
+@import 'base/variables';    // For $color-*, $font-*, etc.
+@import 'base/typography';   // For general text styling, headings, body
+@import 'base/reset';        // For resets, global element styles, utilities
+@import 'base/base';         // Added: For body, #main-content, and other base element styles
+
+// Utilities & Mixins - Global helpers that other base files or components might use
+@import 'utils/mixins';
+// @import 'utils/functions'; // If you have SCSS functions
+
+// Base styles that might use mixins or need to be defined after utils
+@import 'base/utilities';    // Common utility classes (can now use mixins)
+@import 'base/animations';   // Keyframes for animations
+
+// Component Styles
+@import 'components/buttons';
+@import 'components/cards';
+@import 'components/dropdowns';
+@import 'components/todos'; // Or specific name like _todo-list
+
+// Layout Styles (optional, if you have them)
+// @import 'layout/layout';
+// @import 'layout/header';
+// @import 'layout/footer'; 

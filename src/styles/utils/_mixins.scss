@@ -1,1 +1,95 @@
- 
+// AST/src/styles/utils/_mixins.scss
+
+// Breakpoint map
+// Values can be adjusted as needed for the project
+$breakpoints: (
+  'sm': 576px,
+  'md': 768px,
+  'lg': 992px,
+  'xl': 1200px,
+  'xxl': 1400px
+);
+
+// Respond-to mixin (min-width)
+// Usage: @include respond-to('md') { /* styles for medium screens and up */ }
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Breakpoint '#{$breakpoint}' not found in $breakpoints map. Available breakpoints: #{map-keys($breakpoints)}";
+  }
+}
+
+// Respond-to-max mixin (max-width)
+// Usage: @include respond-to-max('sm') { /* styles for screens smaller than small */ }
+@mixin respond-to-max($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    // Subtract 1px to avoid overlap with min-width queries if using both for the same breakpoint name
+    @media (max-width: (map-get($breakpoints, $breakpoint) - 1px)) {
+      @content;
+    }
+  } @else {
+    @warn "Breakpoint '#{$breakpoint}' not found in $breakpoints map. Available breakpoints: #{map-keys($breakpoints)}";
+  }
+}
+
+// Animation Mixins
+
+// Safe Animation Mixin (handles prefers-reduced-motion)
+// Usage: @include safe-animation(fadeIn 1s ease-out);
+//        @include safe-animation(slideIn 0.5s forwards, false); // if no reduced motion alternative for this specific anim
+@mixin safe-animation($animation-props, $has-reduced-motion-alternative: true) {
+  animation: $animation-props;
+
+  @if $has-reduced-motion-alternative {
+    @media (prefers-reduced-motion: reduce) {
+      animation: none; // Default: disable animation. Can be overridden in specific mixins.
+    }
+  }
+}
+
+// Basic Fade-In Mixin
+// Usage: @include animation-fade-in(0.5s, 0.2s); // duration, delay
+@mixin animation-fade-in($duration: 1s, $delay: 0s, $timing-function: ease-out) {
+  opacity: 0; // Start transparent for fade-in
+  @include safe-animation(fadeIn #{$duration} #{$timing-function} #{$delay} forwards);
+  
+  // Refined reduced motion handling for fade-in: ensure it becomes visible.
+  @media (prefers-reduced-motion: reduce) {
+    opacity: 1; 
+    // animation: none; // The safe-animation mixin already handles this if not overridden.
+                     // We override here to ensure opacity is set.
+  }
+}
+
+// Basic Slide-In from Bottom Mixin
+// Usage: @include animation-slide-in-from-bottom(20px, 0.5s, 0.1s); // distance, duration, delay
+@mixin animation-slide-in-from-bottom($distance: 30px, $duration: 0.5s, $delay: 0s, $timing-function: ease-out) {
+  opacity: 0; // Start transparent
+  transform: translateY($distance); // Start off-screen
+  @include safe-animation(slideInFromBottom #{$duration} #{$timing-function} #{$delay} forwards);
+
+  // Specific reduced motion handling for slide-in: appear without sliding
+  @media (prefers-reduced-motion: reduce) {
+    opacity: 1;
+    transform: translateY(0);
+    animation: none; // Explicitly override safe-animation's default if it differs
+  }
+}
+
+// Basic Slide-In from Left Mixin
+// Usage: @include animation-slide-in-from-left(20px, 0.5s, 0.1s); // distance, duration, delay
+@mixin animation-slide-in-from-left($distance: 30px, $duration: 0.5s, $delay: 0s, $timing-function: ease-out) {
+  opacity: 0; // Start transparent
+  transform: translateX(-$distance); // Start off-screen to the left
+  @include safe-animation(slideInFromLeft #{$duration} #{$timing-function} #{$delay} forwards);
+
+  // Specific reduced motion handling: appear without sliding
+  @media (prefers-reduced-motion: reduce) {
+    opacity: 1;
+    transform: translateX(0);
+    animation: none; // Explicitly override safe-animation's default
+  }
+} 

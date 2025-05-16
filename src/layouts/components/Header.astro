@@ -1,0 +1,107 @@
+---
+import Navigation from './Navigation.astro';
+import SandoHubLogo from "../../components/SandoHubLogo.svelte";
+const { showHeader = true } = Astro.props;
+// const siteTitle = "Sando Hub"; // No longer needed here, Svelte component handles the text
+---
+
+{
+  showHeader && (
+    <header class="site-header">
+      <div class="container">
+        <div class="site-branding">
+          <!-- SandoHubLogo is an <a> tag itself -->
+          <SandoHubLogo client:load />
+        </div>
+        <Navigation />
+        <div class="search-container">
+          <button class="search-toggle" aria-label="Toggle search" aria-expanded="false" aria-controls="search-form-id">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+  )
+}
+
+<style lang="scss">
+  @use '../../styles/utils/mixins' as m; // Assuming mixins for breakpoints etc.
+  @use '../../styles/base/variables' as v; // Assuming variables for colors, spacing etc.
+
+  .site-header {
+    background-color: v.$color-creamy-white; // Changed to creamy-white for better contrast
+    padding: v.$spacing-unit v.$spacing-unit * 2;
+    border-bottom: 1px solid v.$color-bread-brown; // Artisan bread style border
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: v.$max-width;
+      margin: 0 auto;
+      padding: 0 v.$spacing-unit * 2; // Consistent with BaseLayout padding
+    }
+
+    .site-branding {
+      // .site-logo-link { // This wrapper is removed as SandoHubLogo is an <a> tag
+      //   text-decoration: none;
+      // }
+      // Apply color here so SandoHubLogo inherits it
+      color: v.$color-dark-earthy-text;
+      min-width: 12.5rem; // Allocate space for the full logo text to prevent layout shift
+
+      .site-title-text { // This class is no longer used directly for the main logo
+        font-size: 1.5em;
+        font-weight: bold;
+        color: v.$color-dark-earthy-text; // Artisan bread style text
+      }
+      // .site-logo { ... styles for logo image ... }
+    }
+  }
+
+  // Any styles for Navigation.astro itself if it were just text links here
+  // would go into Navigation.astro. Header.astro styles its direct children.
+
+  // Responsive styles for the header
+  @include m.respond-to-max(medium) {
+    .site-header {
+      .container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+    .site-branding {
+      margin-bottom: v.$spacing-unit;
+    }
+    // The .search-toggle might also need to be repositioned or styled for mobile here
+    // For example, it could be part of the mobile navigation menu itself, or placed differently.
+    // For now, it will stack below the navigation in the column layout.
+  }
+
+  // Search Toggle Button Styles
+  .search-toggle {
+    background: none;
+    border: none;
+    color: v.$color-dark-earthy-text; // Artisan bread style text
+    cursor: pointer;
+    padding: 0.5rem; // Add some padding for easier clicking
+    margin-left: v.$spacing-unit; // Space it from the navigation
+
+    svg {
+      display: block; // Remove extra space below SVG
+    }
+
+    &:hover {
+      color: v.$color-accent;
+    }
+
+    // &[aria-expanded="true"] {
+    //   // Styles when search is open, e.g., change icon or background
+    // }
+  }
+
+  // .logo-container was removed as SandoHubLogo is placed directly
+  // .search-container { // This style rule might be duplicated or incomplete, review context
+  //   display: flex;
+  // }
+</style> 

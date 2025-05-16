@@ -2,10 +2,10 @@
 import TestIsland from '../components/svelte/TestIsland.svelte';
 import ColorFontTestIsland from '../components/svelte/ColorFontTestIsland.svelte';
 import '../styles/main.scss'; // Import global SCSS
-import Layout from '../layouts/Layout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<Layout title="Style & Component Tests" isHomePage={false}>
+<BaseLayout title="Style & Component Tests" isHomePage={false}>
   <main class="container">
     <div class="page-container">
       <h1>SCSS Style & Component Showcase</h1>
@@ -193,7 +193,7 @@ import Layout from '../layouts/Layout.astro';
 
     </div>
   </main>
-</Layout>
+</BaseLayout>
 
 <style is:global>
   /* ... existing global styles ... */

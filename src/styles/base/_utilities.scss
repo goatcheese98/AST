@@ -1,0 +1,117 @@
+// AST/src/styles/base/_utilities.scss
+
+// Spacing utilities
+// These utilities generate classes like .m-1, .mt-1, .px-3, etc.
+
+$spacing-values: (
+  '0': 0,
+  '1': 0.25rem, // Consider linking these to a $spacer variable if defined globally
+  '2': 0.5rem,
+  '3': 1rem,
+  '4': 1.5rem,
+  '5': 3rem
+);
+
+$spacing-properties: (
+  'm': 'margin',
+  'p': 'padding'
+);
+
+// t (top), b (bottom), s (start/left), e (end/right), x (horizontal), y (vertical), blank (all sides)
+$spacing-sides: (
+  't': 'top',
+  'b': 'bottom',
+  's': 'left', // Assuming LTR, maps to inline-start conceptually
+  'e': 'right',// Assuming LTR, maps to inline-end conceptually
+  'x': ('left', 'right'),
+  'y': ('top', 'bottom'),
+  '': null // For all sides, property name doesn't take a suffix
+);
+
+@each $prop-abbr, $prop-name in $spacing-properties {
+  @each $side-abbr, $side-name-or-names in $spacing-sides {
+    @each $size-key, $size-value in $spacing-values {
+      $class-infix: if($side-abbr == '', '', '#{$side-abbr}-');
+      $class-name: ".#{$prop-abbr}#{$class-infix}#{$size-key}";
+
+      #{$class-name} {
+        @if $side-name-or-names == null { // All sides
+          #{$prop-name}: $size-value !important;
+        } @else if type-of($side-name-or-names) == 'list' { // Horizontal or Vertical (x or y)
+          @each $side in $side-name-or-names {
+            #{$prop-name}-#{$side}: $size-value !important;
+          }
+        } @else { // Single side (t, b, s, e)
+          #{$prop-name}-#{$side-name-or-names}: $size-value !important;
+        }
+      }
+    }
+  }
+}
+
+// Text alignment
+.text-left   { text-align: left !important; }
+.text-center { text-align: center !important; }
+.text-right  { text-align: right !important; }
+
+// Display utilities
+.d-none    { display: none !important; }
+.d-inline  { display: inline !important; }
+.d-block   { display: block !important; }
+.d-flex    { display: flex !important; }
+// Add .d-grid, .d-inline-block, .d-inline-flex etc. as needed 
+
+// Flexbox utilities
+.flex-row            { flex-direction: row !important; }
+.flex-column         { flex-direction: column !important; }
+.flex-row-reverse    { flex-direction: row-reverse !important; }
+.flex-column-reverse { flex-direction: column-reverse !important; }
+
+.justify-content-start   { justify-content: flex-start !important; }
+.justify-content-end     { justify-content: flex-end !important; }
+.justify-content-center  { justify-content: center !important; }
+.justify-content-between { justify-content: space-between !important; }
+.justify-content-around  { justify-content: space-around !important; }
+.justify-content-evenly  { justify-content: space-evenly !important; }
+
+.align-items-start     { align-items: flex-start !important; }
+.align-items-end       { align-items: flex-end !important; }
+.align-items-center    { align-items: center !important; }
+.align-items-baseline  { align-items: baseline !important; }
+.align-items-stretch   { align-items: stretch !important; }
+
+.align-content-start   { align-content: flex-start !important; }
+.align-content-end     { align-content: flex-end !important; }
+.align-content-center  { align-content: center !important; }
+.align-content-between { align-content: space-between !important; }
+.align-content-around  { align-content: space-around !important; }
+.align-content-stretch { align-content: stretch !important; }
+
+.align-self-start    { align-self: flex-start !important; }
+.align-self-end      { align-self: flex-end !important; }
+.align-self-center   { align-self: center !important; }
+.align-self-baseline { align-self: baseline !important; }
+.align-self-stretch  { align-self: stretch !important; }
+
+.flex-grow-0   { flex-grow: 0 !important; }
+.flex-grow-1   { flex-grow: 1 !important; }
+.flex-shrink-0 { flex-shrink: 0 !important; }
+.flex-shrink-1 { flex-shrink: 1 !important; }
+
+.flex-wrap         { flex-wrap: wrap !important; }
+.flex-nowrap       { flex-wrap: nowrap !important; }
+.flex-wrap-reverse { flex-wrap: wrap-reverse !important; }
+
+
+// Responsive Display Utilities
+// The $breakpoints map is defined in utils/_mixins.scss and should be available here
+// due to the corrected import order in main.scss.
+@each $bp-name, $bp-value in $breakpoints {
+  @include respond-to($bp-name) {
+    .d-#{$bp-name}-none    { display: none !important; }
+    .d-#{$bp-name}-inline  { display: inline !important; }
+    .d-#{$bp-name}-block   { display: block !important; }
+    .d-#{$bp-name}-flex    { display: flex !important; }
+    // Add other display types (e.g., .d-#{$bp-name}-grid) as needed
+  }
+} 

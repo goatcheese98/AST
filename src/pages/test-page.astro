@@ -1,31 +1,94 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import TestIsland from '../components/svelte/TestIsland.svelte';
-import DirectusService from '../services/directus';
+import { getAllRecipes } from '../services/recipeService';
+import { getAllBlogPosts } from '../services/blogService';
 
-const directus = new DirectusService();
 let recipes = [];
 try {
-  recipes = await directus.getRecipes();
+  recipes = await getAllRecipes();
   console.log('Recipes fetched on test-page:', recipes);
 } catch (error) {
   console.error('Failed to fetch recipes on test-page:', error);
 }
+
+let blogPosts = [];
+try {
+  blogPosts = await getAllBlogPosts();
+  console.log('Blog posts fetched on test-page:', blogPosts);
+} catch (error) {
+  console.error('Failed to fetch blog posts on test-page:', error);
+}
 ---
 
-<Layout title="Test Page - Directus & Svelte" isHomePage={false}>
+<BaseLayout title="Test Page - Directus & Svelte" isHomePage={false}>
   <h1>Directus Data Fetching Test</h1>
   <p>Attempting to fetch recipes from Directus and display them.</p>
   
   {recipes.length > 0 ? (
     <ul>
       {recipes.map(recipe => (
-        <li>
+        <li style="margin-bottom: 2em; padding-bottom: 1em; border-bottom: 1px solid #eee;">
           <h2>{recipe.title}</h2>
-          <p><strong>Cuisine:</strong> {recipe.cuisine || 'N/A'}</p>
+          <p><strong>Slug:</strong> {recipe.slug || 'N/A'}</p>
+          <p><strong>Status:</strong> {recipe.status || 'N/A'}</p>
+          <p><strong>Short Description:</strong> {recipe.short_description || 'N/A'}</p>
+          <p><strong>Published Date:</strong> {recipe.date_published ? new Date(recipe.date_published).toLocaleDateString() : 'N/A'}</p>
+          <p><strong>Difficulty:</strong> {recipe.difficulty || 'N/A'}</p>
           <p><strong>Prep Time:</strong> {recipe.prep_time || 'N/A'} minutes</p>
           <p><strong>Cook Time:</strong> {recipe.cook_time || 'N/A'} minutes</p>
-          {recipe.image && <img src={directus.getAssetUrl(recipe.image)} alt={recipe.title} width="200" />}
+          
+          {recipe.categories && recipe.categories.length > 0 && (
+            <p><strong>Categories:</strong> {recipe.categories.join(', ')}</p>
+          )}
+          {recipe.tags && recipe.tags.length > 0 && (
+            <p><strong>Tags:</strong> {recipe.tags.join(', ')}</p>
+          )}
+
+          {recipe.imageUrl && <img src={recipe.imageUrl} alt={recipe.title} width="200" />}
+
+          <h3>Ingredients:</h3>
+          {typeof recipe.ingredients === 'string' && recipe.ingredients ? (
+            <p>{recipe.ingredients}</p>
+          ) : Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0 ? (
+            <ul>
+              {recipe.ingredients.map((ingredient, index) => (
+                <li key={index}>
+                  {typeof ingredient === 'object' && ingredient !== null ? 
+                    (ingredient.name || ingredient.ingredient || JSON.stringify(ingredient)) : 
+                    ingredient}
+                </li>
+              ))}
+            </ul>
+          ) : recipe.ingredients ? (
+            <pre>{JSON.stringify(recipe.ingredients, null, 2)}</pre>
+          ) : (
+            <p>N/A</p>
+          )}
+
+          <h3>Instructions:</h3>
+          {typeof recipe.instructions === 'string' && recipe.instructions ? (
+            <p>{recipe.instructions}</p>
+          ) : Array.isArray(recipe.instructions) && recipe.instructions.length > 0 ? (
+            <ol>
+              {recipe.instructions.map((item, index) => (
+                <li key={index}>
+                  {typeof item === 'object' && item !== null ? 
+                    (item.step || item.instruction || JSON.stringify(item)) : 
+                    item}
+                </li>
+              ))}
+            </ol>
+          ) : recipe.instructions ? (
+            <pre>{JSON.stringify(recipe.instructions, null, 2)}</pre>
+          ) : (
+            <p>N/A</p>
+          )}
+
+          <details>
+            <summary>Raw Recipe Data (for debugging)</summary>
+            <pre>{JSON.stringify(recipe, null, 2)}</pre>
+          </details>
         </li>
       ))}
     </ul>
@@ -34,6 +97,47 @@ try {
   )}
 
   <hr />
+
+  <h2>Blog Posts Test</h2>
+  <p>Attempting to fetch blog posts from Directus and display them.</p>
+
+  {blogPosts.length > 0 ? (
+    <ul>
+      {blogPosts.map(post => (
+        <li style="margin-bottom: 2em; padding-bottom: 1em; border-bottom: 1px solid #eee;">
+          <h2>{post.title}</h2>
+          <p><strong>Slug:</strong> {post.slug || 'N/A'}</p>
+          <p><strong>Published Date:</strong> {post.published_date ? new Date(post.published_date).toLocaleDateString() : 'N/A'}</p>
+          <p><strong>Author:</strong> {post.authorName || 'N/A'}</p>
+          {post.authorAvatarUrl && 
+            <img src={post.authorAvatarUrl} alt={post.authorName || 'Author Avatar'} width="50" style="border-radius: 50%;" />
+          }
+          {post.featuredImageUrl && 
+            <div style="margin-top: 0.5em;">
+              <img src={post.featuredImageUrl} alt={post.title} width="300" />
+            </div>
+          }
+          <div style="margin-top: 0.5em;">
+            <strong>Content Summary (first 150 chars):</strong> 
+            {post.content ? `${post.content.substring(0, 150)}...` : 'N/A'}
+            {/* For full content, you might use <Fragment set:html={post.content} /> if content is HTML */}
+          </div>
+          {post.tags && post.tags.length > 0 && (
+            <p><strong>Tags:</strong> {post.tags.join(', ')}</p>
+          )}
+          {/* Display any other specific fields you have, e.g., post.excerpt, post.meta_description etc. */}
+          <details>
+            <summary>Raw Post Data (for debugging)</summary>
+            <pre>{JSON.stringify(post, null, 2)}</pre>
+          </details>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p>No blog posts found or failed to load.</p>
+  )}
+
+  <hr />
   <h2>Svelte Island Test</h2>
   <TestIsland client:load />
-</Layout> 
+</BaseLayout> 

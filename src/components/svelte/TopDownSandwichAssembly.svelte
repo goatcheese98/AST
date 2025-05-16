@@ -1,4 +1,4 @@
-<script lang="ts">
+ svelte <script lang="ts">
   import { onMount, tick } from 'svelte';
   import gsap from 'gsap';
 

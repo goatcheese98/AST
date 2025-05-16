@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@astrojs/svelte": "^7.0.13",
+    "@directus/sdk": "^19.1.0",
     "astro": "^5.7.13",
     "gsap": "^3.13.0",
     "svelte": "^5.30.1"

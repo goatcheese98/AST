@@ -1,0 +1,234 @@
+---
+// src/layouts/components/Navigation.astro
+const navLinks = [
+  { href: "/", text: "Home" },
+  { href: "/recipes", text: "Recipes" },
+  { href: "/blog", text: "Blog" },
+  { href: "/about", text: "About" },
+  // For testing, let's add the links from the old Layout.astro for now
+  // We can consolidate these later.
+  { href: "/test-page", text: "Test Page" },
+  { href: "/style-tests", text: "Style Tests" },
+  { href: "/gsap-tests", text: "GSAP Tests" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+<nav class="site-navigation" aria-label="Main navigation">
+  <button class="mobile-nav-toggle" aria-controls="primary-navigation" aria-expanded="false">
+    <span class="sr-only">Menu</span>
+    {/* Simple CSS Hamburger Icon (can be replaced with SVG) */}
+    <span class="hamburger-icon">
+      <span class="line line1"></span>
+      <span class="line line2"></span>
+      <span class="line line3"></span>
+    </span>
+  </button>
+  <ul id="primary-navigation" class="nav-links">
+    {navLinks.map(link => {
+      const isActive = currentPath === link.href || (link.href !== "/" && currentPath.startsWith(link.href + '/'));
+      return (
+        <li>
+          <a 
+            href={link.href} 
+            class:list={{ "is-active": isActive }}
+            aria-current={isActive ? "page" : false}
+          >
+            {link.text}
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+
+<script>
+  const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+  const primaryNav = document.querySelector('#primary-navigation');
+  const siteNavigation = document.querySelector('.site-navigation'); // Assuming this is the parent <nav>
+
+  if (mobileNavToggle && primaryNav && siteNavigation) {
+    mobileNavToggle.addEventListener('click', () => {
+      const isOpened = mobileNavToggle.getAttribute('aria-expanded') === 'true';
+      mobileNavToggle.setAttribute('aria-expanded', !isOpened ? 'true' : 'false');
+      siteNavigation.classList.toggle('is-mobile-open');
+      
+      // Optional: Trap focus within the menu when open
+      // Optional: Close menu if escape key is pressed
+      // Optional: Close menu if a click occurs outside the menu
+    });
+  }
+</script>
+
+<style lang="scss">
+  @use '../../styles/base/variables' as v;
+  @use '../../styles/utils/mixins' as m; // Restore mixins import
+
+  .site-navigation {
+    position: relative; // For positioning the mobile menu dropdown
+  }
+
+  .mobile-nav-toggle {
+    display: none; // Hidden by default, shown in media query
+    background: v.$color-light-yellow; // Updated to match demo-rustic-bread
+    border: 1px solid v.$color-bread-brown; // Optional: subtle border
+    color: v.$color-dark-earthy-text; // For icon color if using currentColor SVG or text
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001; // Above other header content if menu overlays
+    border-radius: v.$border-radius-sm;
+
+    .hamburger-icon {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 24px;
+      height: 20px; 
+
+      .line {
+        display: block;
+        height: 2px;
+        width: 100%;
+        background-color: v.$color-dark-earthy-text; // Contrasting lines
+        border-radius: 1px;
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      }
+    }
+
+    // Hamburger animation when active (aria-expanded="true")
+    &[aria-expanded="true"] .line1 {
+      transform: translateY(7px) rotate(45deg);
+    }
+    &[aria-expanded="true"] .line2 {
+      opacity: 0;
+    }
+    &[aria-expanded="true"] .line3 {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+  }
+
+  .nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    li {
+      // Explicitly remove any pseudo-elements that might be causing the dots
+      &::before, &::after {
+        display: none !important;
+        content: '' !important; 
+      }
+    }
+
+    a {
+      text-decoration: none;
+      font-family: v.$font-secondary; // Using Quicksand for nav links
+      font-weight: 600; // Slightly bolder for better readability as buttons
+      color: v.$color-dark-earthy-text; // Artisan bread text color for all states initially
+      
+      // "Piece of Bread" default style
+      background-color: v.$color-light-yellow;
+      border: 2px solid v.$color-bread-brown; // Crust
+      padding: 0.7em 1.3em; // Adjusted padding for bread-like feel
+      border-radius: v.$border-radius-md; // Rounded slice corners
+      box-shadow: inset 0 0 4px rgba(v.$color-dark-earthy-text, 0.1); // Subtle inner dimension
+      
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      display: inline-block; 
+      line-height: 1;
+      text-align: center;
+
+      // "Toasting" effect on hover/focus
+      &:hover, &:focus {
+        background-color: v.$color-bread-brown; // Toasted bread background
+        color: v.$color-light-yellow;           // Text color for toasted state
+        border-color: darken(v.$color-bread-brown, 10%); // Slightly darker crust
+        box-shadow: inset 0 0 5px rgba(v.$color-black, 0.2), 0 2px 4px rgba(v.$color-black, 0.15); // Toasted depth + lift
+        text-decoration: none;
+        transform: translateY(-1px); // Slight lift
+      }
+
+      // Active state: Should look like "toasted" bread
+      &.is-active {
+        background-color: v.$color-bread-brown;
+        color: v.$color-light-yellow;
+        border-color: darken(v.$color-bread-brown, 10%);
+        box-shadow: inset 0 0 5px rgba(v.$color-black, 0.2);
+        font-weight: 700; // Keep active distinct
+        transform: none; // No lift for active, it's already selected
+
+        // No separate hover for active, it already looks toasted
+        // If a different hover on active is desired, define it here
+      }
+    }
+  }
+
+  // Mobile Navigation Styles
+  @media (max-width: 767px) { 
+    .mobile-nav-toggle {
+      // Styles are already artisan bread themed, should be fine
+      display: block;
+    }
+
+    .nav-links {
+      display: none; 
+      position: absolute;
+      top: 100%; 
+      right: 0; 
+      background-color: v.$color-light-yellow; // Updated to match demo-rustic-bread
+      border: 1px solid v.$color-bread-brown;
+      border-top: none; // Avoid double border with header bottom
+      padding: v.$spacing-unit;
+      min-width: 200px; 
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 0 0 v.$border-radius-md v.$border-radius-md;
+
+      flex-direction: column;
+      align-items: stretch; 
+      gap: 0.5rem;
+
+      li {
+        width: 100%;
+      }
+
+      a {
+        // Mobile links will inherit the new base styles.
+        // Adjust for stacked view
+        padding: 0.8em 1em; 
+        border-radius: v.$border-radius-sm; 
+        box-shadow: inset 0 0 3px rgba(v.$color-dark-earthy-text, 0.05); // Lighter inner shadow for mobile
+        border-width: 1px; // Thinner border for mobile list items
+        margin-bottom: 0.3em; // Space out bread slices in mobile
+
+        &:hover, &:focus {
+            transform: none; // No lift on mobile hover, keep it simple
+            box-shadow: inset 0 0 4px rgba(v.$color-black, 0.15); // Simpler toasted shadow
+        }
+      }
+      
+      a.is-active {
+         box-shadow: inset 0 0 4px rgba(v.$color-black, 0.15); // Simpler toasted shadow for active mobile
+      }
+    }
+
+    .site-navigation.is-mobile-open .nav-links {
+      display: flex; 
+    }
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style> 
