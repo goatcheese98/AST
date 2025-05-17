@@ -4,6 +4,7 @@ import HeroSection from '../components/homepage/HeroSection.astro';
 import FeaturedRecipesSection from '../components/homepage/FeaturedRecipesSection.astro';
 import LatestBlogPostsSection from '../components/homepage/LatestBlogPostsSection.astro';
 import CategoryTagsNavigationSection from '../components/homepage/CategoryTagsNavigationSection.astro';
+import FeaturedSlider from '../components/svelte/FeaturedSlider.svelte';
 
 const pageTitle = "Sando Hub - Deliciously Crafted Sandwiches & More!";
 const pageDescription = "Welcome to Sando Hub! Discover unique sandwich recipes, browse our food blog, and find your next favorite meal.";
@@ -12,6 +13,7 @@ const pageDescription = "Welcome to Sando Hub! Discover unique sandwich recipes,
 <BaseLayout title={pageTitle} description={pageDescription} isHomePage={true}>
 	<div class="homepage-content">
 		<HeroSection />
+		<FeaturedSlider client:load />
 		<FeaturedRecipesSection />
 		<LatestBlogPostsSection />
 		<CategoryTagsNavigationSection />

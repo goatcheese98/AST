@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import gsap from 'gsap';
   import SplitText from 'gsap/SplitText';
@@ -8,22 +8,62 @@
   let initialFallTimeline = null;
   let hoverDistortTimeline = null;
   let splitInstance = null;
-  // Use the same brown as defined in _variables.scss (v.$color-dark-earthy-text)
   const unifiedBrown = '#5D4037'; 
 
   onMount(() => {
-    gsap.registerPlugin(SplitText);
+    console.log('[SandoHubLogo] onMount started');
 
-    if (!logoContainerEl) return;
+    if (typeof gsap === 'undefined') {
+      console.error('[SandoHubLogo] GSAP is undefined!');
+      return;
+    }
+    if (typeof SplitText === 'undefined') {
+      console.error('[SandoHubLogo] SplitText is undefined!');
+      return;
+    }
+
+    gsap.registerPlugin(SplitText);
+    console.log('[SandoHubLogo] SplitText registered');
+
+    if (!logoContainerEl) {
+      console.error('[SandoHubLogo] logoContainerEl is not defined!');
+      return;
+    }
+    console.log('[SandoHubLogo] logoContainerEl is defined:', logoContainerEl);
 
     const textEl = logoContainerEl.querySelector('.text');
     const sliceEl = logoContainerEl.querySelector('.slice-effect');
 
+    if (!textEl) {
+      console.error('[SandoHubLogo] textEl not found!');
+      return;
+    }
+    console.log('[SandoHubLogo] textEl found:', textEl);
+
+    if (!sliceEl) {
+      console.warn('[SandoHubLogo] sliceEl not found, but this might be okay if only text animation is desired initially.');
+    }
+
     if (textEl.textContent.trim() === "") {
+        console.log('[SandoHubLogo] textEl is empty, setting default text.');
         textEl.textContent = sandoHubText;
     }
-    splitInstance = new SplitText(textEl, { type: "chars" });
+    
+    try {
+      console.log('[SandoHubLogo] Attempting to create SplitText instance.');
+      splitInstance = new SplitText(textEl, { type: "chars" });
+      console.log('[SandoHubLogo] SplitText instance created:', splitInstance);
+    } catch (e) {
+      console.error('[SandoHubLogo] Error creating SplitText instance:', e);
+      return;
+    }
+    
     const chars = splitInstance.chars;
+    if (!chars || chars.length === 0) {
+      console.error('[SandoHubLogo] SplitText did not produce any characters!');
+      return;
+    }
+    console.log('[SandoHubLogo] Characters for animation:', chars.length);
 
     gsap.set(chars, { color: unifiedBrown });
 
@@ -37,6 +77,7 @@
       stagger: 0.05,
       ease: "elastic.out(1, 0.5)",
     });
+    console.log('[SandoHubLogo] Initial fall timeline created.');
 
     hoverDistortTimeline = gsap.timeline({
       paused: true,
@@ -47,7 +88,7 @@
                 y: 0, 
                 skewX: 0, 
                 scale: 1, 
-                color: unifiedBrown, // Revert to unifiedBrown
+                color: unifiedBrown,
                 clearProps: "filter,transformOrigin"
             });
         }
@@ -93,8 +134,10 @@
         transformOrigin: "center center"
       }, sliceAnimationStartTime + "+=" + distortionDelay);
     });
+    console.log('[SandoHubLogo] Hover distort timeline created.');
 
     return () => {
+      console.log('[SandoHubLogo] onMount cleanup function called.');
       if (splitInstance) splitInstance.revert();
       if (initialFallTimeline) initialFallTimeline.kill();
       if (hoverDistortTimeline) hoverDistortTimeline.kill();
@@ -111,7 +154,7 @@
         y: 0,
         skewX: 0,
         scale: 1,
-        color: unifiedBrown, // Use unifiedBrown
+        color: unifiedBrown,
         clearProps: "filter,transformOrigin"
       });
       const sliceEl = logoContainerEl.querySelector('.slice-effect');
@@ -142,8 +185,6 @@
     font-family: 'Arial', sans-serif;
     font-size: 2rem;
     font-weight: bold;
-    /* Base color will be inherited from Header.astro's .site-branding which uses v.$color-dark-earthy-text (#5D4037) */
-    /* color: #5D4037; Explicit color here can be removed if Header.astro reliably provides it */
     cursor: pointer;
     position: relative;
     min-width: 200px;
@@ -156,8 +197,6 @@
     z-index: 1;
     display: inline-block;
     white-space: nowrap;
-    /* No !important needed now, should inherit or be set by GSAP consistently */
-    /* color: #5D4037; */ 
   }
 
   .slice-effect {
