@@ -1,15 +1,17 @@
 ---
 // AST/src/components/homepage/HeroSection.astro
+import HeroAnimation from '../svelte/HeroAnimation.svelte';
 ---
-<section class="hero-section">
-  <h2>Hero Section</h2>
-  <p>Content for the hero section will go here.</p>
+<section class="hero-section-wrapper">
+  <HeroAnimation client:load />
 </section>
 
 <style lang="scss">
-  .hero-section {
-    padding: 2rem;
-    text-align: center;
-    border: 1px dashed #ccc;
+  .hero-section-wrapper {
+    // This wrapper can be used for any additional layout or spacing
+    // specific to how the HeroAnimation component is placed on the page,
+    // without altering the HeroAnimation component's internal styles.
+    // For now, it might not need specific styles if HeroAnimation handles its own full bleed.
+    width: 100%; // Ensure it can take full width if needed
   }
 </style> 

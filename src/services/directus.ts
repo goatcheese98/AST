@@ -73,7 +73,7 @@ export default class DirectusService {
     console.log('Fetching recipes from Directus...');
     try {
       // Adjust fields as needed, e.g., '?fields=id,title,slug,image,cuisine,prep_time,cook_time'
-      const result = await this.request<DirectusResponseArray<Recipe>>('/items/recipes?fields=*,image.id');
+      const result = await this.request<DirectusResponseArray<Recipe>>('/items/recipes?fields=*,main_image.id');
       console.log('Successfully fetched recipes:', result.data.length);
       return result.data;
     } catch (error) {

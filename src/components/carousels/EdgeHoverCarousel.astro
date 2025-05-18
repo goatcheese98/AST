@@ -1,0 +1,101 @@
+---
+import ExpandingRecipeCard from '../svelte/ExpandingRecipeCard.svelte';
+import type { RecipeItem } from '../svelte/ExpandingRecipeCard.svelte';
+
+export interface Props {
+  items: RecipeItem[];
+  carouselTitle?: string;
+  scrollSpeed?: number; // Will be added back later
+}
+
+const { 
+  items, 
+  carouselTitle = 'Featured Items',
+  scrollSpeed = 2 // Will be added back later
+} = Astro.props;
+
+// const hardcodedScrollSpeed = 2; // Hardcoding for now - No longer needed
+---
+
+<div class="edge-hover-carousel-wrapper">
+  {carouselTitle && <h2 class="carousel-title">{carouselTitle}</h2>}
+  <div class="carousel-viewport">
+    <div class="scroll-trigger scroll-trigger-left"></div>
+    <div class="carousel-track">
+      {items.map(item => (
+        <div class="carousel-item-wrapper">
+          <ExpandingRecipeCard recipe={item} client:visible />
+        </div>
+      ))}
+    </div>
+    <div class="scroll-trigger scroll-trigger-right"></div>
+  </div>
+</div>
+
+<script>
+  // NO define:vars for this extreme test
+  console.log('[[[ SCRIPT EXECUTION TEST - EdgeHoverCarousel.astro - This MUST appear if script tag runs ]]]');
+
+  // All other JS logic is removed for this test.
+  // document.addEventListener('astro:page-load', () => {
+  //   console.log('[DEBUG] EdgeHoverCarousel: astro:page-load event fired.');
+     // ... rest of the complex script
+  // });
+</script>
+
+<style lang="scss">
+  .edge-hover-carousel-wrapper {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .carousel-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-text-primary, #333);
+    margin-bottom: 1rem;
+    padding-left: 10px;
+  }
+
+  .carousel-viewport {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .carousel-track {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    // scroll-behavior: smooth; // Might interfere with setInterval scrolling
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .carousel-item-wrapper {
+    flex-shrink: 0;
+  }
+
+  .scroll-trigger {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10%; 
+    max-width: 80px;
+    z-index: 20;
+    // background-color: rgba(0, 255, 0, 0.1); // For debugging
+    cursor: pointer;
+
+    &.scroll-trigger-left {
+      left: 0;
+    }
+    &.scroll-trigger-right {
+      right: 0;
+    }
+  }
+</style> 

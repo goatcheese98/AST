@@ -1,0 +1,138 @@
+import ExpandingRecipeCard from '../svelte/ExpandingRecipeCard.svelte';
+import type { RecipeItem } from '../svelte/ExpandingRecipeCard.svelte';
+
+export interface Props {
+  items: RecipeItem[];
+  carouselTitle?: string;
+  scrollSpeed?: number; // Pixels per animation frame, e.g., 2
+}
+
+const { 
+  items, 
+  carouselTitle = 'Featured Items', 
+  scrollSpeed = 2 
+} = Astro.props;
+
+<div class="edge-scroll-carousel-wrapper">
+  {carouselTitle && <h2 class="carousel-title">{carouselTitle}</h2>}
+  <div class="carousel-viewport">
+    <div class="scroll-trigger scroll-trigger-left" aria-hidden="true"></div>
+    <div class="carousel-track">
+      {items.map(item => (
+        <div class="carousel-item-wrapper">
+          <ExpandingRecipeCard recipe={item} client:visible />
+        </div>
+      ))}
+    </div>
+    <div class="scroll-trigger scroll-trigger-right" aria-hidden="true"></div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const carousels = document.querySelectorAll('.edge-scroll-carousel-wrapper');
+
+    carousels.forEach(carouselWrapper => {
+      const viewport = carouselWrapper.querySelector('.carousel-viewport');
+      const track = carouselWrapper.querySelector('.carousel-track');
+      const triggerLeft = carouselWrapper.querySelector('.scroll-trigger-left');
+      const triggerRight = carouselWrapper.querySelector('.scroll-trigger-right');
+      
+      if (!viewport || !track || !triggerLeft || !triggerRight) return;
+
+      let scrollInterval = null;
+      // console.log('Test speed value from define:vars:', aTestSpeedValue); // For debugging
+      const effectiveScrollSpeed = 2; // Fallback to a default value since define:vars is removed
+
+      const startScrolling = (direction) => {
+        if (scrollInterval) clearInterval(scrollInterval);
+        scrollInterval = setInterval(() => {
+          const currentScroll = track.scrollLeft;
+          const maxScroll = track.scrollWidth - viewport.clientWidth;
+          let newScrollLeft = currentScroll + (direction * effectiveScrollSpeed);
+
+          if (newScrollLeft < 0) newScrollLeft = 0;
+          if (newScrollLeft > maxScroll) newScrollLeft = maxScroll;
+          
+          track.scrollLeft = newScrollLeft;
+
+          // Stop if at edge
+          if ((direction === -1 && newScrollLeft === 0) || (direction === 1 && newScrollLeft === maxScroll)) {
+            stopScrolling();
+          }
+        }, 16); // approx 60fps
+      };
+
+      const stopScrolling = () => {
+        if (scrollInterval) clearInterval(scrollInterval);
+        scrollInterval = null;
+      };
+
+      triggerLeft.addEventListener('mouseenter', () => startScrolling(-1));
+      triggerLeft.addEventListener('mouseleave', stopScrolling);
+      triggerRight.addEventListener('mouseenter', () => startScrolling(1));
+      triggerRight.addEventListener('mouseleave', stopScrolling);
+
+      // Stop scrolling if mouse leaves the entire viewport as well
+      viewport.addEventListener('mouseleave', stopScrolling);
+    });
+  });
+</script>
+
+<style lang="scss">
+  .edge-scroll-carousel-wrapper {
+    width: 100%;
+    margin-bottom: 2rem; // Space below the carousel
+  }
+
+  .carousel-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--color-text-primary, #333);
+    margin-bottom: 1rem;
+    padding-left: 10px; // Align with potential padding in track
+  }
+
+  .carousel-viewport {
+    position: relative;
+    width: 100%;
+    overflow: hidden; // This is important to hide the non-visible parts of the track
+  }
+
+  .carousel-track {
+    display: flex;
+    gap: 20px; // Space between cards
+    padding: 10px; // Padding inside the track, so cards don't touch edges immediately
+    overflow-x: auto; // Fallback for non-JS or touch scrolling
+    scrollbar-width: none; // Hide scrollbar for Firefox
+    -ms-overflow-style: none; // Hide scrollbar for IE/Edge
+    scroll-behavior: smooth; // For programmatic scrolling, though setInterval overrides this for edge scroll
+
+    &::-webkit-scrollbar {
+      display: none; // Hide scrollbar for Chrome, Safari, Opera
+    }
+  }
+
+  .carousel-item-wrapper {
+    flex-shrink: 0; // Prevent items from shrinking
+    // The ExpandingRecipeCard will define its own width/max-width
+  }
+
+  .scroll-trigger {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10%; // Adjust width of the trigger zone
+    max-width: 80px; // Max width for larger screens
+    z-index: 20; // Ensure it's above cards for hover
+    // background-color: rgba(255, 0, 0, 0.1); // For debugging trigger zones
+    cursor: pointer; // Indicate interactivity (though handled by JS)
+
+    &.scroll-trigger-left {
+      left: 0;
+    }
+    &.scroll-trigger-right {
+      right: 0;
+    }
+  }
+</style> 

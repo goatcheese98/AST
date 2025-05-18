@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RecipeFilter from '../../components/svelte/RecipeFilter.svelte';
+import RecipeSearch from '../../components/svelte/RecipeSearch.svelte';
+import RecipeGrid from '../../components/svelte/RecipeGrid.svelte';
+import type { RecipeListItem } from '../../components/svelte/RecipeGrid.svelte';
+// import DirectusService from '../../services/directus.ts'; // To be used later
+
+const pageTitle = "All Recipes";
+const pageDescription = "Browse all our delicious recipes. Filter by category, tags, difficulty, or search for something specific.";
+
+// Placeholder for fetched recipes - to be implemented later
+let allRecipes: RecipeListItem[] = [];
+let fetchError: string | null = null;
+
+// TODO: Fetch all recipes from Directus
+// try {
+//   const directusService = new DirectusService();
+//   const rawRecipes = await directusService.getRecipes(); // Or a more specific method
+//   // TODO: Map rawRecipes to RecipeListItem[] structure
+//   // allRecipes = mappedRecipes;
+// } catch (error) {
+//   console.error("Error fetching all recipes:", error);
+//   fetchError = "Could not load recipes at this time.";
+// }
+
+// TODO: Implement filtering and search logic that updates a 'displayRecipes' array
+let displayRecipes: RecipeListItem[] = allRecipes;
+
+--- 
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <div class="recipes-page-container">
+    <header class="recipes-page-header">
+      <h1>{pageTitle}</h1>
+      <p>{pageDescription}</p>
+    </header>
+
+    <div class="recipes-content-area">
+      <aside class="filters-sidebar">
+        <RecipeFilter client:load />
+      </aside>
+
+      <main class="recipes-main-content">
+        <RecipeSearch client:load />
+        {fetchError && <p class="error-message">{fetchError}</p>}
+        {!fetchError && <RecipeGrid recipes={displayRecipes} client:load />}
+      </main>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style lang="scss">
+  .recipes-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-md);
+  }
+
+  .recipes-page-header {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+    h1 {
+      font-size: var(--font-size-h1);
+      color: var(--color-primary);
+      margin-bottom: var(--space-sm);
+    }
+    p {
+      font-size: var(--font-size-lg);
+      color: var(--color-text-secondary);
+    }
+  }
+
+  .recipes-content-area {
+    display: flex;
+    gap: var(--space-lg);
+  }
+
+  .filters-sidebar {
+    flex: 0 0 280px; // Fixed width for sidebar
+    // Add styling for sidebar background, padding etc. if needed
+    background-color: #fdfdfd; // Similar to .test-section
+    padding: var(--space-md);
+    border: 1px solid #eeeeee;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    align-self: flex-start; // Keep sidebar from stretching if content is short
+  }
+
+  .recipes-main-content {
+    flex: 1; // Takes remaining space
+  }
+
+  .error-message {
+    color: var(--color-error);
+    text-align: center;
+    padding: var(--space-md);
+  }
+</style> 

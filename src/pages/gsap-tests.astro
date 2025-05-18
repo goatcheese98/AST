@@ -1,16 +1,174 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ExpandingRecipeCard from '../components/svelte/ExpandingRecipeCard.svelte';
+import type { RecipeItem } from '../components/svelte/ExpandingRecipeCard.svelte';
+import SvelteEdgeCarousel from '../components/svelte/SvelteEdgeCarousel.svelte';
+import FeaturedSlider from '../components/svelte/FeaturedSlider.svelte';
+import RecipeCard from '../components/svelte/RecipeCard.svelte';
 import GsapTestBox from '../components/svelte/GsapTestBox.svelte';
 import SandwichStacker from '../components/svelte/SandwichStacker.svelte';
 import DetailedSandwichAssembly from '../components/svelte/DetailedSandwichAssembly.svelte';
 import TopDownSandwichAssembly from '../components/svelte/TopDownSandwichAssembly.svelte';
+// import HeroEntranceAnimation from '../components/svelte/HeroEntranceAnimation.svelte'; // Commenting out old/alternative
+import HeroAnimation from '../components/svelte/HeroAnimation.svelte'; // Importing the correct one
+// import EdgeScrollCarousel from '../components/carousels/EdgeScrollCarousel.astro'; // Old one
+import EdgeHoverCarousel from '../components/carousels/EdgeHoverCarousel.astro'; // New one
 
 const pageTitle = "GSAP Animation Tests";
 const description = "Testing GSAP animations within Astro and Svelte.";
+
+// Sample data for SvelteEdgeCarousel
+const svelteCarouselRecipeItems: RecipeItem[] = [
+  {
+    id: 'svelte-carousel-1',
+    title: 'Svelte BLT Supreme',
+    image: '/images/placeholder-blt-supreme.webp',
+    description: 'A supreme BLT experience, rendered by Svelte.',
+    tags: ['BLT', 'Classic', 'Svelte', 'Lunch'],
+    prepTime: '10 mins',
+    cookTime: '5 mins',
+    servings: 1
+  },
+  {
+    id: 'svelte-carousel-2',
+    title: 'Svelte Chorizo Fiesta',
+    image: '/images/placeholder-chorizo-fiesta.webp',
+    description: 'Spicy chorizo in a Svelte-powered expanding card.',
+    tags: ['Spicy', 'Chorizo', 'Svelte', 'Dinner'],
+    prepTime: '12 mins',
+    cookTime: '10 mins',
+    servings: 2
+  },
+  {
+    id: 'svelte-carousel-3',
+    title: 'Svelte Veggie Delight',
+    image: '/images/placeholder-veggie-svelte.webp',
+    description: 'Fresh vegetables in a delightful Svelte presentation.',
+    tags: ['Vegetarian', 'Healthy', 'Svelte', 'Quick'],
+    prepTime: '15 mins',
+    cookTime: 'N/A',
+    servings: 1
+  },
+  {
+    id: 'svelte-carousel-4',
+    title: 'Svelte Club Classic',
+    image: '/images/placeholder-club-svelte.webp',
+    description: 'The classic club sandwich, now sleeker with Svelte.',
+    tags: ['Club', 'Traditional', 'Svelte', 'Staple'],
+    prepTime: '8 mins',
+    cookTime: '2 mins',
+    servings: 1
+  }
+];
+
+// Sample data for the ExpandingRecipeCard test (Spicy Chorizo)
+const spicyChorizoRecipe = {
+  id: 'spicy-chorizo-test',
+  title: 'Spicy Chorizo Baguette (Standalone Test)',
+  image: 'https://via.placeholder.com/300x200/FF8C00/FFFFFF?Text=Chorizo+Baguette',
+  description: 'Fiery chorizo, manchego cheese, and roasted red peppers in an expanding card.',
+  tags: ['Spicy', 'Sandwich', 'Hearty', 'Test'],
+  prepTime: '10 mins',
+  cookTime: '15 mins',
+  servings: 1
+};
+
+// Data for EdgeScrollCarousel
+const carouselRecipeItems: RecipeItem[] = [
+  {
+    id: 'carousel-item-1',
+    title: 'Carousel Classic Club',
+    image: 'https://via.placeholder.com/300x200/8A2BE2/FFFFFF?Text=Club+Carousel+1',
+    description: 'A delicious club sandwich, perfect for the carousel.',
+    tags: ['Classic', 'Carousel', 'Lunch'],
+    prepTime: '12 mins',
+    cookTime: '5 mins',
+    servings: 1
+  },
+  { ...spicyChorizoRecipe, id: 'carousel-item-2', title: 'Carousel Spicy Chorizo', image: 'https://via.placeholder.com/300x200/FF4500/FFFFFF?Text=Chorizo+Carousel+2' },
+  {
+    id: 'carousel-item-3',
+    title: 'Veggie Delight Carousel',
+    image: 'https://via.placeholder.com/300x200/228B22/FFFFFF?Text=Veggie+Carousel+3',
+    description: 'A refreshing veggie sandwich for the carousel lineup.',
+    tags: ['Vegetarian', 'Carousel', 'Healthy'],
+    prepTime: '15 mins',
+    cookTime: '0 mins',
+    servings: 1
+  },
+  {
+    id: 'carousel-item-4',
+    title: 'Roast Beef Rider',
+    image: 'https://via.placeholder.com/300x200/A52A2A/FFFFFF?Text=Beef+Carousel+4',
+    description: 'Hearty roast beef on rye, featured in our carousel.',
+    tags: ['Beef', 'Carousel', 'Hearty'],
+    prepTime: '8 mins',
+    cookTime: '10 mins',
+    servings: 1
+  },
+  {
+    id: 'carousel-item-5',
+    title: 'Turkey Trot Special',
+    image: 'https://via.placeholder.com/300x200/DEB887/FFFFFF?Text=Turkey+Carousel+5',
+    description: 'Lean turkey and cranberry, a carousel favorite.',
+    tags: ['Turkey', 'Carousel', 'Light'],
+    prepTime: '10 mins',
+    cookTime: '2 mins',
+    servings: 1
+  }
+];
 ---
 
 <BaseLayout title={pageTitle} description={description} isHomePage={false}>
   <main class="gsap-test-page">
+    <section class="test-section">
+      <h2>Svelte Edge Hover Carousel Test</h2>
+      <p>Testing the SvelteEdgeCarousel component with ExpandingRecipeCard items.</p>
+      <div class="animation-container svelte-edge-carousel-test-container" style="width: 100%; padding: 0; background-color: transparent; border: none; min-height: auto;">
+        <SvelteEdgeCarousel items={svelteCarouselRecipeItems} carouselTitle="Svelte Powered Edge Hover" client:visible />
+      </div>
+    </section>
+
+    <section class="test-section">
+      <h2>Edge Hover Carousel Test (New Astro Component)</h2>
+      <p>Testing the new EdgeHoverCarousel component with ExpandingRecipeCard items.</p>
+      <div class="animation-container edge-hover-carousel-test-container" style="width: 100%; padding: 0; background-color: transparent; border: none; min-height: auto;">
+        <EdgeHoverCarousel items={carouselRecipeItems} carouselTitle="Dynamic Edge Hover (New)" scrollSpeed={3} client:visible />
+      </div>
+    </section>
+
+    <section class="test-section">
+      <h2>Standalone Expanding Recipe Card Test</h2>
+      <p>Testing the new ExpandingRecipeCard component with dynamic hover details.</p>
+      <div class="animation-container expanding-card-test-container" style="padding: var(--space-md); background-color: var(--color-background-muted);">
+        <ExpandingRecipeCard recipe={spicyChorizoRecipe} client:visible />
+      </div>
+    </section>
+
+    <section class="test-section">
+      <h2>Refactored Featured Slider Test</h2>
+      <p>Testing the FeaturedSlider component, now using ExpandingRecipeCard components internally.</p>
+      <div class="animation-container featured-slider-test-container" style="width: 100%; padding: 0; background-color: transparent; border: none; min-height: auto;">
+        <FeaturedSlider client:visible />
+      </div>
+    </section>
+
+    <section class="test-section">
+      <h2>Perfect Classic BLT Recipe Card Test</h2>
+      <p>Testing the default RecipeCard component (which displays the Perfect Classic BLT).</p>
+      <div class="animation-container recipe-card-test-container" style="padding: var(--space-md); background-color: var(--color-background-muted);">
+        <RecipeCard client:visible />
+      </div>
+    </section>
+
+    <section class="test-section">
+      <h2>Hero Section Animation Test</h2>
+      <p>Testing the primary hero section animation component.</p>
+      <div class="animation-container hero-entrance-test-container" style="width: 100%; padding: 0; min-height: auto; background-color: transparent; border: none;">
+        <HeroAnimation client:visible />
+      </div>
+    </section>
+
     <section class="test-section">
       <h2>Top-Down Sandwich Assembly</h2>
       <p>Ingredients appearing and layering from a top-down perspective.</p>
@@ -86,5 +244,13 @@ const description = "Testing GSAP animations within Astro and Svelte.";
   .top-down-animation-container {
     min-height: 350px; /* Slightly more space for top-down view if needed */
     /* background-color: #e9e9e9; ensure it contrasts if component bg is similar */
+  }
+
+  .hero-entrance-test-container {
+    /* You might want to adjust min-height or background if needed */
+    /* For example, if the hero component has its own background, 
+       you might make this one transparent or remove its specific styling */
+    background-color: var(--color-background-alt); /* Or transparent */
+    min-height: 350px; /* Ensure enough space */
   }
 </style> 

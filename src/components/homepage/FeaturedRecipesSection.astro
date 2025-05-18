@@ -1,16 +1,121 @@
 ---
 // AST/src/components/homepage/FeaturedRecipesSection.astro
+// import FeaturedSlider from '../svelte/FeaturedSlider.svelte'; // Old slider removed
+import SvelteEdgeCarousel from '../svelte/SvelteEdgeCarousel.svelte';
+import type { RecipeItem } from '../svelte/ExpandingRecipeCard.svelte';
+import DirectusService from '../../services/directus.ts'; // Import the service
+
+const directusService = new DirectusService();
+let homepageFeaturedRecipes: RecipeItem[] = [];
+let fetchError: string | null = null;
+
+// Define the expected structure from Directus more explicitly for mapping
+interface DirectusRecipe {
+  id: string | number;
+  title: string;
+  main_image?: { id: string }; // Updated to reflect it's an object with an id
+  short_description?: string;
+  tags?: string[]; // Assuming Directus native tags field provides an array of strings
+  prep_time?: string;
+  cook_time?: string;
+  difficulty?: any; // Changed to any to inspect its actual type from Directus
+  // Add any other fields you might need from Directus, even if not directly on RecipeItem
+}
+
+try {
+  // Fetch recipes from Directus
+  // The getRecipes method in directus.ts uses ?fields=*,image.id, which is good.
+  // Let's add a limit to the query here directly in the getRecipes call if possible,
+  // or modify getRecipes to accept parameters. For now, we assume getRecipes fetches all.
+  // If directus.ts getRecipes method doesn't support query params for fields/limit directly,
+  // this part might need adjustment or the service method updated.
+  // For now, I will assume getRecipes fetches what we need and we can slice later.
+  
+  // Let's update the service to allow passing query parameters for flexibility.
+  // For now, I will proceed as if getRecipes fetches recipes and we map them.
+  // The query in directus.ts is `/items/recipes?fields=*,image.id`
+  // We should enhance this to be more specific or add a limit.
+
+  // Modification: For now, directly call the request method for more control
+  // until getRecipes is made more flexible or a new method is added.
+  // However, this means duplicating some logic. It's better to enhance getRecipes.
+  // Let's assume for this step we modify getRecipes later and for now just use it as is and slice.
+
+  const rawDirectusRecipes = await directusService.getRecipes(); // This fetches all fields due to '*'
+
+  // Log the first raw recipe to inspect its structure, especially 'difficulty'
+  if (rawDirectusRecipes && rawDirectusRecipes.length > 0) {
+    console.log("First raw Directus recipe data:", JSON.stringify(rawDirectusRecipes[0], null, 2));
+    // Log all raw recipes to see their main_image fields
+    console.log("All raw Directus recipes data:", JSON.stringify(rawDirectusRecipes, null, 2)); 
+  }
+
+  // Limit the number of recipes for the carousel
+  const limitedRecipes = rawDirectusRecipes.slice(0, 7); // Show up to 7 recipes
+
+  homepageFeaturedRecipes = limitedRecipes.map((recipe: DirectusRecipe) => {
+    let difficultyString: string;
+    if (typeof recipe.difficulty === 'string') {
+      difficultyString = recipe.difficulty;
+    } else if (recipe.difficulty !== null && recipe.difficulty !== undefined) {
+      // If difficulty is not a string but exists, try to convert it.
+      // This might need adjustment based on actual structure (e.g., if it's an object recipe.difficulty.value)
+      difficultyString = String(recipe.difficulty);
+      console.warn(`Recipe ID ${recipe.id}: 'difficulty' field was not a string (${typeof recipe.difficulty}), converted to "${difficultyString}". Original value:`, recipe.difficulty);
+    } else {
+      difficultyString = 'N/A';
+    }
+
+    const imageUrl = recipe.main_image && recipe.main_image.id ? directusService.getAssetUrl(recipe.main_image.id) : '/images/placeholder-default.webp';
+    console.log(`Recipe: "${recipe.title}", Main Image ID from object: "${recipe.main_image?.id}", Generated URL: "${imageUrl}"`);
+
+    return {
+      id: recipe.id,
+      title: recipe.title || 'Untitled Recipe',
+      image: imageUrl, // Use the logged URL
+      description: recipe.short_description || 'No description available.',
+      tags: recipe.tags || [], // Ensure tags is an array, even if null/undefined from Directus
+      prepTime: recipe.prep_time || 'N/A',
+      cookTime: recipe.cook_time || 'N/A',
+      difficulty: difficultyString, // Ensure this is now always a string
+    };
+  });
+
+} catch (error) {
+  console.error("Error fetching featured recipes from Directus:", error);
+  fetchError = "Could not load featured recipes at this time. Please try again later.";
+  // Fallback to empty array or previously defined static data if desired
+  homepageFeaturedRecipes = []; // Or use the static data previously here as a fallback
+}
+
 ---
 <section class="featured-recipes-section">
-  <h2>Featured Recipes</h2>
-  <p>Content for featured recipes will go here (grid/carousel).</p>
+  <h2>Must-Try Sandwiches</h2>
+  {fetchError && <p class="error-message">{fetchError}</p>}
+  {!fetchError && homepageFeaturedRecipes.length > 0 && (
+    <SvelteEdgeCarousel items={homepageFeaturedRecipes} carouselTitle="" client:visible />
+  )}
+  {!fetchError && homepageFeaturedRecipes.length === 0 && (
+    <p>No featured recipes available at the moment. Check back soon!</p>
+  )}
 </section>
 
 <style lang="scss">
   .featured-recipes-section {
-    padding: 2rem;
+    padding: var(--space-lg) var(--space-md);
     text-align: center;
-    border: 1px dashed #ccc;
-    margin-top: 1rem;
+    background-color: var(--color-background-alt);
+    margin-bottom: var(--space-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-low);
+  }
+  .featured-recipes-section h2 {
+    font-size: var(--font-size-h2);
+    color: var(--color-primary);
+    margin-bottom: var(--space-lg);
+  }
+  .error-message {
+    color: var(--color-error);
+    font-style: italic;
   }
 </style> 
