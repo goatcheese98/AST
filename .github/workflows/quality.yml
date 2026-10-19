@@ -1,0 +1,29 @@
+name: Recipe quality
+on:
+  pull_request:
+  push:
+    branches: [master]
+permissions:
+  contents: read
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck:cms
+      - run: npm run typecheck
+      - run: npm run check:svelte:slice
+      - run: npm run lint
+      - run: npm run build
+        env:
+          PUBLIC_DIRECTUS_URL: ''
+      - run: npm run build:fixture
