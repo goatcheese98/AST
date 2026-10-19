@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["src/components/svelte/DetailedSandwichAssembly.svelte", "src/components/svelte/ExpandingRecipeCard.svelte", "src/env.d.ts"]
+}

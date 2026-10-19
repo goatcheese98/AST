@@ -27,7 +27,7 @@ const svelteCarouselRecipeItems: RecipeItem[] = [
     tags: ['BLT', 'Classic', 'Svelte', 'Lunch'],
     prepTime: '10 mins',
     cookTime: '5 mins',
-    servings: 1
+    difficulty: '', servings: 1
   },
   {
     id: 'svelte-carousel-2',
@@ -37,7 +37,7 @@ const svelteCarouselRecipeItems: RecipeItem[] = [
     tags: ['Spicy', 'Chorizo', 'Svelte', 'Dinner'],
     prepTime: '12 mins',
     cookTime: '10 mins',
-    servings: 2
+    difficulty: '', servings: 2
   },
   {
     id: 'svelte-carousel-3',
@@ -47,7 +47,7 @@ const svelteCarouselRecipeItems: RecipeItem[] = [
     tags: ['Vegetarian', 'Healthy', 'Svelte', 'Quick'],
     prepTime: '15 mins',
     cookTime: 'N/A',
-    servings: 1
+    difficulty: '', servings: 1
   },
   {
     id: 'svelte-carousel-4',
@@ -57,7 +57,7 @@ const svelteCarouselRecipeItems: RecipeItem[] = [
     tags: ['Club', 'Traditional', 'Svelte', 'Staple'],
     prepTime: '8 mins',
     cookTime: '2 mins',
-    servings: 1
+    difficulty: '', servings: 1
   }
 ];
 
@@ -70,7 +70,7 @@ const spicyChorizoRecipe = {
   tags: ['Spicy', 'Sandwich', 'Hearty', 'Test'],
   prepTime: '10 mins',
   cookTime: '15 mins',
-  servings: 1
+  difficulty: '', servings: 1
 };
 
 // Data for EdgeScrollCarousel
@@ -83,7 +83,7 @@ const carouselRecipeItems: RecipeItem[] = [
     tags: ['Classic', 'Carousel', 'Lunch'],
     prepTime: '12 mins',
     cookTime: '5 mins',
-    servings: 1
+    difficulty: '', servings: 1
   },
   { ...spicyChorizoRecipe, id: 'carousel-item-2', title: 'Carousel Spicy Chorizo', image: 'https://via.placeholder.com/300x200/FF4500/FFFFFF?Text=Chorizo+Carousel+2' },
   {
@@ -94,7 +94,7 @@ const carouselRecipeItems: RecipeItem[] = [
     tags: ['Vegetarian', 'Carousel', 'Healthy'],
     prepTime: '15 mins',
     cookTime: '0 mins',
-    servings: 1
+    difficulty: '', servings: 1
   },
   {
     id: 'carousel-item-4',
@@ -104,7 +104,7 @@ const carouselRecipeItems: RecipeItem[] = [
     tags: ['Beef', 'Carousel', 'Hearty'],
     prepTime: '8 mins',
     cookTime: '10 mins',
-    servings: 1
+    difficulty: '', servings: 1
   },
   {
     id: 'carousel-item-5',
@@ -114,7 +114,7 @@ const carouselRecipeItems: RecipeItem[] = [
     tags: ['Turkey', 'Carousel', 'Light'],
     prepTime: '10 mins',
     cookTime: '2 mins',
-    servings: 1
+    difficulty: '', servings: 1
   }
 ];
 ---
@@ -133,7 +133,7 @@ const carouselRecipeItems: RecipeItem[] = [
       <h2>Edge Hover Carousel Test (New Astro Component)</h2>
       <p>Testing the new EdgeHoverCarousel component with ExpandingRecipeCard items.</p>
       <div class="animation-container edge-hover-carousel-test-container" style="width: 100%; padding: 0; background-color: transparent; border: none; min-height: auto;">
-        <EdgeHoverCarousel items={carouselRecipeItems} carouselTitle="Dynamic Edge Hover (New)" scrollSpeed={3} client:visible />
+        <EdgeHoverCarousel items={carouselRecipeItems} carouselTitle="Dynamic Edge Hover (New)" scrollSpeed={3} />
       </div>
     </section>
 

@@ -1,3 +1,4 @@
+---
 import ExpandingRecipeCard from '../svelte/ExpandingRecipeCard.svelte';
 import type { RecipeItem } from '../svelte/ExpandingRecipeCard.svelte';
 
@@ -12,6 +13,7 @@ const {
   carouselTitle = 'Featured Items', 
   scrollSpeed = 2 
 } = Astro.props;
+---
 
 <div class="edge-scroll-carousel-wrapper">
   {carouselTitle && <h2 class="carousel-title">{carouselTitle}</h2>}
@@ -40,11 +42,12 @@ const {
       
       if (!viewport || !track || !triggerLeft || !triggerRight) return;
 
-      let scrollInterval = null;
+      let scrollInterval: ReturnType<typeof setInterval> | null = null;
       // console.log('Test speed value from define:vars:', aTestSpeedValue); // For debugging
       const effectiveScrollSpeed = 2; // Fallback to a default value since define:vars is removed
 
-      const startScrolling = (direction) => {
+      const startScrolling = (direction: -1 | 1) => {
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         if (scrollInterval) clearInterval(scrollInterval);
         scrollInterval = setInterval(() => {
           const currentScroll = track.scrollLeft;

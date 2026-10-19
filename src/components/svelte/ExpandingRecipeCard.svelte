@@ -10,11 +10,13 @@
     prepTime: string;
     cookTime: string;
     difficulty: string;
+    servings?: number;
   }
 </script>
 
 <script lang="ts">
   // AST/src/components/svelte/ExpandingRecipeCard.svelte
+  import { recipePath } from '../../services/directus';
   import { onMount, onDestroy } from 'svelte'; // Added onDestroy
   // Type is imported from module script implicitly by Svelte if defined above
   // For clarity, one might use `import type { RecipeItem } from './ExpandingRecipeCard.svelte';`
@@ -29,11 +31,12 @@
   let cardRef: HTMLDivElement;
   let tagsViewportRef: HTMLDivElement;
   let tagsTrackRef: HTMLDivElement;
-  let hoverTimeout: any = null;
+  let hoverTimeout: ReturnType<typeof setTimeout> | null = null;
   let scrollAnimationId: number | null = null;
   const scrollSpeed = 0.2; // pixels per frame, adjusted for slower speed
 
   function startTagScroll() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (!tagsViewportRef || !tagsTrackRef || !recipe.tags || recipe.tags.length === 0) return;
 
     const viewportWidth = tagsViewportRef.clientWidth;
@@ -113,12 +116,12 @@
   // Hover effects are primarily CSS-driven as per original FeaturedSlider.
 </script>
 
-<div class="expanding-recipe-card" bind:this={cardRef} on:mouseenter={handleMouseEnter} on:mouseleave={handleMouseLeave}>
+<div role="group" aria-label={recipe.title} class="expanding-recipe-card" bind:this={cardRef} on:mouseenter={handleMouseEnter} on:mouseleave={handleMouseLeave}>
   <div class="card-image-container">
-    <img src={recipe.image} alt={recipe.title} />
+    {#if recipe.image}<img src={recipe.image} alt={recipe.title} />{:else}<p>Recipe image unavailable</p>{/if}
   </div>
   <div class="card-content-slider">
-    <h3 class="card-title-slider">{recipe.title}</h3>
+    <h3 class="card-title-slider"><a href={recipePath(recipe)}>{recipe.title}</a></h3>
     <p class="card-description-slider">{recipe.description}</p>
     <div class="additional-details">
       <div class="recipe-meta-slider">
@@ -273,14 +276,7 @@
     gap: 5px;
     .meta-icon-slider {
       font-size: 0.9em;
-      &.difficulty-easy,
-      &.difficulty-medium,
-      &.difficulty-hard {
-        // Optional: Add specific colors or slightly larger size for difficulty icons if desired
-        // Example: &.difficulty-easy { color: green; }
-        // Example: &.difficulty-medium { font-size: 1em; } // Make medium have two distinct icons
-        // For chef hats, they are already distinct by count. Color could be added.
-      }
+
     }
   }
 

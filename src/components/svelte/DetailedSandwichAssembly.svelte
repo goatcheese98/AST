@@ -2,19 +2,26 @@
   import { onMount, tick } from 'svelte';
   import gsap from 'gsap';
 
+  // Recipe mode uses validated CMS text; demo artwork remains on the existing test route.
+  export let steps: string[] = [];
+  let currentStep = 0;
+  let demoTimeline: gsap.core.Timeline | undefined;
+  let paused = false;
+  let reduced = false;
+
   interface Ingredient {
     id: string;
     name: string;
     classes: string;
-    style: string; 
+    style: string;
     animation: {
       from: gsap.TweenVars;
       to: gsap.TweenVars;
       duration: number;
-      delay?: number; 
+      delay?: number;
       randomRotationRange?: { fromMin: number; fromMax: number; toMin: number; toMax: number };
     };
-    text?: string; 
+    text?: string;
   }
 
   const ingredients: Ingredient[] = [
@@ -89,74 +96,97 @@
   let assemblyArea: HTMLDivElement;
   let ingredientRefs: Record<string, HTMLDivElement> = {};
 
-  onMount(async () => {
-    await tick();
-    if (typeof gsap === 'undefined' || typeof gsap.utils === 'undefined' || typeof gsap.utils.random !== 'function') {
-      console.error('GSAP or GSAP utils not fully loaded');
-      return;
-    }
-
-    const tl = gsap.timeline({
-      onComplete: () => console.log('Detailed Sandwich assembly loop complete!'),
-      repeat: -1,
-      delay: 2,
-    });
-
-    ingredients.forEach((ing, index) => {
-      const el = ingredientRefs[ing.id];
-      if (!el) return;
-
-      let fromVars = { ...ing.animation.from, opacity: 0 };
-      let toVars = { ...ing.animation.to, opacity: 1, duration: ing.animation.duration };
-
-      if (ing.animation.randomRotationRange) {
-        fromVars.rotation = gsap.utils.random(ing.animation.randomRotationRange.fromMin, ing.animation.randomRotationRange.fromMax, true);
-        toVars.rotation = gsap.utils.random(ing.animation.randomRotationRange.toMin, ing.animation.randomRotationRange.toMax, true);
+  onMount(() => {
+    if (steps.length) return;
+    let cancelled = false;
+    void tick().then(() => {
+      if (cancelled) return;
+      reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduced) {
+        Object.values(ingredientRefs).forEach(el => { el.style.opacity = '1'; });
+        return;
+      }
+      if (typeof gsap === 'undefined' || typeof gsap.utils === 'undefined' || typeof gsap.utils.random !== 'function') {
+        console.error('GSAP or GSAP utils not fully loaded');
+        return;
       }
 
-      gsap.set(el, fromVars); 
-      tl.to(el, toVars, ing.animation.delay !== undefined ? `+=${ing.animation.delay}` : '>');
-      
-      const itemBelowId = ingredients[index - 1]?.id;
-      const itemBelowEl = itemBelowId ? ingredientRefs[itemBelowId] : null;
+      const tl = gsap.timeline({
+        onComplete: () => console.log('Detailed Sandwich assembly loop complete!'),
+        repeat: -1,
+        delay: 2,
+      });
 
-      if (itemBelowEl) {
-        let squishAmount = 0.95;
-        let squishOffsetY = '2px';
-        if (ing.id.includes('patty')) { squishAmount = 0.9; squishOffsetY = '4px'; }
-        if (ing.id.includes('bread-top')) { squishAmount = 0.88; squishOffsetY = '5px'; }
+      demoTimeline = tl;
+      ingredients.forEach((ing, index) => {
+        const el = ingredientRefs[ing.id];
+        if (!el) return;
 
-        tl.to(itemBelowEl, { 
-          scaleY: squishAmount, 
-          y: squishOffsetY, 
-          transformOrigin: 'bottom', 
-          duration: 0.15, 
-          yoyo: true, 
-          repeat: 1, 
-          ease: 'power1.inOut' 
-        }, "-=" + (ing.animation.duration * 0.7));
-      }
+        let fromVars = { ...ing.animation.from, opacity: 0 };
+        let toVars = { ...ing.animation.to, opacity: 1, duration: ing.animation.duration };
+
+        if (ing.animation.randomRotationRange) {
+          fromVars.rotation = gsap.utils.random(ing.animation.randomRotationRange.fromMin, ing.animation.randomRotationRange.fromMax, true);
+          toVars.rotation = gsap.utils.random(ing.animation.randomRotationRange.toMin, ing.animation.randomRotationRange.toMax, true);
+        }
+
+        gsap.set(el, fromVars);
+        tl.to(el, toVars, ing.animation.delay !== undefined ? `+=${ing.animation.delay}` : '>');
+
+        const itemBelowId = ingredients[index - 1]?.id;
+        const itemBelowEl = itemBelowId ? ingredientRefs[itemBelowId] : null;
+
+        if (itemBelowEl) {
+          let squishAmount = 0.95;
+          let squishOffsetY = '2px';
+          if (ing.id.includes('patty')) { squishAmount = 0.9; squishOffsetY = '4px'; }
+          if (ing.id.includes('bread-top')) { squishAmount = 0.88; squishOffsetY = '5px'; }
+
+          tl.to(itemBelowEl, {
+            scaleY: squishAmount,
+            y: squishOffsetY,
+            transformOrigin: 'bottom',
+            duration: 0.15,
+            yoyo: true,
+            repeat: 1,
+            ease: 'power1.inOut'
+          }, "-=" + (ing.animation.duration * 0.7));
+        }
+      });
+
+      tl.fromTo(assemblyArea,
+        { y: '-5px', rotation: -0.5 },
+        { y: '0px', rotation: 0, duration: 0.8, ease: 'elastic.out(1, 0.4)', delay: 0.2 }
+      , '>');
+
+      tl.to({}, {duration: 2});
     });
-
-    tl.fromTo(assemblyArea, 
-      { y: '-5px', rotation: -0.5 }, 
-      { y: '0px', rotation: 0, duration: 0.8, ease: 'elastic.out(1, 0.4)', delay: 0.2 }
-    , '>');
-    
-    tl.to({}, {duration: 2});
+    return () => { cancelled = true; demoTimeline?.kill(); };
   });
 
 </script>
 
+{#if steps.length}
+  <section aria-label="Step-by-step assembly" class="recipe-assembly">
+    <p class="muted" aria-live="polite">Step {currentStep + 1} of {steps.length}</p>
+    <p aria-live="polite">{steps[currentStep]}</p>
+    <div class="actions">
+      <button disabled={currentStep === 0} on:click={() => currentStep -= 1}>Previous step</button>
+      <button disabled={currentStep === steps.length - 1} on:click={() => currentStep += 1}>Next step</button>
+      <a href="#written-steps">Return to written steps</a>
+    </div>
+  </section>
+{:else}
+{#if !reduced}<button on:click={() => { paused = !paused; demoTimeline?.paused(paused); }}>{paused ? 'Resume animation' : 'Pause animation'}</button>{/if}
 <div class="detailed-sandwich-container" bind:this={assemblyArea}>
   <div class="plate"></div>
   <div class="ingredients-stack-detailed">
     {#each ingredients as item (item.id)}
-      <div 
+      <div
         bind:this={ingredientRefs[item.id]}
-        id={item.id} 
-        class="{item.classes} ingredient-common-styles" 
-        style="{item.style} opacity: 0;" > 
+        id={item.id}
+        class="{item.classes} ingredient-common-styles"
+        style="{item.style} opacity: 0;" >
         {#if item.text}
           <span class="ingredient-text">{item.text}</span>
         {/if}
@@ -165,39 +195,42 @@
   </div>
 </div>
 
+{/if}
+
 <style lang="scss">
+  .recipe-assembly { margin-top:24px; border-top:1px solid var(--line); padding-top:24px; }
   .detailed-sandwich-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end; 
-    min-height: 450px; 
+    justify-content: flex-end;
+    min-height: 450px;
     width: 300px;
     margin: 30px auto;
     padding-bottom: 20px;
-    position: relative; 
+    position: relative;
   }
   .plate {
     width: 280px;
     height: 20px;
     background-color: #E0E0E0; // Light gray plate
-    border-radius: 10px 10px 50% 50% / 10px 10px 20px 20px; 
+    border-radius: 10px 10px 50% 50% / 10px 10px 20px 20px;
     box-shadow: 0 5px 10px rgba(0,0,0,0.2);
     position: absolute;
     bottom: 0;
     z-index: 0;
   }
   .ingredients-stack-detailed {
-    position: relative; 
+    position: relative;
     width: 180px; /* Relative width for ingredients */
     display: flex;
-    flex-direction: column-reverse; 
+    flex-direction: column-reverse;
     align-items: center;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
   }
 
   .ingredient-common-styles {
-    width: 100%; 
+    width: 100%;
     box-sizing: border-box;
     border: 1px solid rgba(0,0,0,0.05); /* Very subtle border */
     display: flex;
@@ -221,7 +254,7 @@
   }
   .lettuce-leaf-style {
     border: 1px solid #406030; /* Darker green border */
-    color: #203018; 
+    color: #203018;
   }
   .tomato-slice-style {
     border: 1px solid #A05050; /* Darker red border */
@@ -232,6 +265,6 @@
     position: relative;
     text-align: center;
     width: 100%;
-    pointer-events: none; 
+    pointer-events: none;
   }
-</style> 
+</style>

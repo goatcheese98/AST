@@ -1,0 +1,50 @@
+---
+import RecipeLayout from '../../layouts/RecipeLayout.astro';
+import Assembly from '../../components/recipes/Assembly.astro';
+import { getAllRecipes } from '../../services/recipeService';
+import type { Recipe } from '../../services/directus';
+export async function getStaticPaths() {
+  let recipes: Recipe[] = [];
+  try { recipes = await getAllRecipes(); } catch { /* Browse shows a bounded unavailable state. */ }
+  return recipes.map(recipe => ({ params: { id: encodeURIComponent(String(recipe.id)) }, props: { recipe } }));
+}
+interface Props { recipe: Recipe; }
+const { recipe } = Astro.props;
+---
+<RecipeLayout title={recipe.title} description={recipe.short_description}>
+  <header class="intro">
+    <a href="/recipes/">← All recipes</a>
+    {recipe.categories.length > 0 && <p class="muted">{recipe.categories.join(' / ')}</p>}
+    <h1>{recipe.title}</h1>
+    {recipe.short_description && <p class="description muted">{recipe.short_description}</p>}
+    <div class="meta">
+      {recipe.prep_time && <span>Prep: {recipe.prep_time}</span>}
+      {recipe.cook_time && <span>Cook: {recipe.cook_time}</span>}
+      {recipe.difficulty && <span>{recipe.difficulty}</span>}
+      {recipe.servings && <span>Servings: {recipe.servings}</span>}
+    </div>
+  </header>
+  <div class="recipe-columns">
+    <section aria-labelledby="ingredients-title"><h2 id="ingredients-title">Ingredients</h2>
+      {recipe.ingredients.length ? <ul>{recipe.ingredients.map(line => <li>{line}</li>)}</ul> : <p class="muted">Ingredients have not been supplied for this recipe.</p>}
+      <div class="recipe-image">
+        {recipe.imageUrl && <img src={recipe.imageUrl} alt={recipe.title} width="360" loading="lazy" data-recipe-image />}
+        <p class="image-placeholder" hidden={Boolean(recipe.imageUrl)} data-image-placeholder>Recipe image unavailable</p>
+      </div>
+    </section>
+    <section class="preparation" aria-labelledby="steps-title"><h2 id="steps-title">Preparation</h2>
+      {recipe.instructions.length ? <ol id="written-steps">{recipe.instructions.map(step => <li>{step}</li>)}</ol> : <p class="muted">Preparation steps have not been supplied for this recipe.</p>}
+      <Assembly steps={recipe.instructions} />
+    </section>
+  </div>
+</RecipeLayout>
+<script>
+  for (const image of document.querySelectorAll<HTMLImageElement>('[data-recipe-image]')) {
+    const fallback = () => {
+      image.hidden = true;
+      image.parentElement?.querySelector('[data-image-placeholder]')?.removeAttribute('hidden');
+    };
+    image.addEventListener('error', fallback);
+    if (image.complete && image.naturalWidth === 0) fallback();
+  }
+</script>

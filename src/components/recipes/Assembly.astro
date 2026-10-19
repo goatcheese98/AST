@@ -1,0 +1,52 @@
+---
+interface Props { steps: string[]; }
+const { steps } = Astro.props;
+---
+{steps.length > 0 ? <div data-assembly data-steps={JSON.stringify(steps)}>
+  <div class="actions"><button class="primary" data-open hidden aria-expanded="false" aria-controls="assembly-view">Explore assembly</button><span class="muted">Optional step-by-step view</span></div>
+  <p data-status role="status"></p>
+  <div id="assembly-view" data-view></div>
+  <noscript><p>The complete written steps are available above.</p></noscript>
+</div> : <p class="muted">Interactive assembly is unavailable for this recipe.</p>}
+<script>
+  import { mount } from 'svelte';
+  for (const root of document.querySelectorAll<HTMLElement>('[data-assembly]')) {
+    const button = root.querySelector<HTMLButtonElement>('[data-open]');
+    const view = root.querySelector<HTMLElement>('[data-view]');
+    const status = root.querySelector<HTMLElement>('[data-status]');
+    if (!button || !view || !status) continue;
+    button.hidden = false;
+    let loaded = false;
+    button.addEventListener('click', async () => {
+      if (loaded) {
+        const expanded = button.getAttribute('aria-expanded') !== 'true';
+        view.hidden = !expanded;
+        button.setAttribute('aria-expanded', String(expanded));
+        button.textContent = expanded ? 'Close assembly' : 'Explore assembly';
+        return;
+      }
+      button.disabled = true;
+      view.setAttribute('aria-busy', 'true');
+      status.textContent = 'Loading assembly…';
+      try {
+        const steps: unknown = JSON.parse(root.dataset.steps ?? 'null');
+        if (!Array.isArray(steps) || !steps.every((s): s is string => typeof s === 'string')) throw new Error();
+        const { default: Component } = await import('../svelte/DetailedSandwichAssembly.svelte');
+        mount(Component, { target: view, props: { steps } });
+        loaded = true;
+        button.setAttribute('aria-expanded', 'true');
+        button.textContent = 'Close assembly';
+        status.textContent = '';
+      } catch {
+        view.replaceChildren();
+        const reload = document.createElement('a');
+        reload.href = window.location.pathname;
+        reload.textContent = 'Reload recipe to try again';
+        status.replaceChildren(document.createTextNode('Assembly could not load. Keep following the written steps. '), reload);
+      } finally {
+        button.disabled = false;
+        view.removeAttribute('aria-busy');
+      }
+    });
+  }
+</script>

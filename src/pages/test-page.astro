@@ -4,18 +4,18 @@ import TestIsland from '../components/svelte/TestIsland.svelte';
 import { getAllRecipes } from '../services/recipeService';
 import { getAllBlogPosts } from '../services/blogService';
 
-let recipes = [];
+let recipes: Awaited<ReturnType<typeof getAllRecipes>> = [];
 try {
   recipes = await getAllRecipes();
-  console.log('Recipes fetched on test-page:', recipes);
+
 } catch (error) {
   console.error('Failed to fetch recipes on test-page:', error);
 }
 
-let blogPosts = [];
+let blogPosts: Awaited<ReturnType<typeof getAllBlogPosts>> = [];
 try {
   blogPosts = await getAllBlogPosts();
-  console.log('Blog posts fetched on test-page:', blogPosts);
+
 } catch (error) {
   console.error('Failed to fetch blog posts on test-page:', error);
 }
@@ -48,42 +48,9 @@ try {
           {recipe.imageUrl && <img src={recipe.imageUrl} alt={recipe.title} width="200" />}
 
           <h3>Ingredients:</h3>
-          {typeof recipe.ingredients === 'string' && recipe.ingredients ? (
-            <p>{recipe.ingredients}</p>
-          ) : Array.isArray(recipe.ingredients) && recipe.ingredients.length > 0 ? (
-            <ul>
-              {recipe.ingredients.map((ingredient, index) => (
-                <li key={index}>
-                  {typeof ingredient === 'object' && ingredient !== null ? 
-                    (ingredient.name || ingredient.ingredient || JSON.stringify(ingredient)) : 
-                    ingredient}
-                </li>
-              ))}
-            </ul>
-          ) : recipe.ingredients ? (
-            <pre>{JSON.stringify(recipe.ingredients, null, 2)}</pre>
-          ) : (
-            <p>N/A</p>
-          )}
-
+          <ul>{recipe.ingredients.map(line => <li>{line}</li>)}</ul>
           <h3>Instructions:</h3>
-          {typeof recipe.instructions === 'string' && recipe.instructions ? (
-            <p>{recipe.instructions}</p>
-          ) : Array.isArray(recipe.instructions) && recipe.instructions.length > 0 ? (
-            <ol>
-              {recipe.instructions.map((item, index) => (
-                <li key={index}>
-                  {typeof item === 'object' && item !== null ? 
-                    (item.step || item.instruction || JSON.stringify(item)) : 
-                    item}
-                </li>
-              ))}
-            </ol>
-          ) : recipe.instructions ? (
-            <pre>{JSON.stringify(recipe.instructions, null, 2)}</pre>
-          ) : (
-            <p>N/A</p>
-          )}
+          <ol>{recipe.instructions.map(line => <li>{line}</li>)}</ol>
 
           <details>
             <summary>Raw Recipe Data (for debugging)</summary>

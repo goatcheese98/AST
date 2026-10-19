@@ -1,0 +1,6 @@
+{
+  "data": [
+    { "id": "fixture-blt", "title": "The Perfect Classic BLT", "slug": "classic-blt", "short_description": "Crisp bacon, fresh lettuce, and ripe tomatoes layered between perfectly toasted bread. A timeless classic for a reason!", "tags": ["Sandwich", "Classic", "Lunch", "Easy"], "prep_time": "10 mins", "cook_time": "5 mins", "servings": 1, "main_image": null, "ingredients": ["Fixture bread", {"quantity": 2, "unit": "slices", "name": "fixture tomato"}], "instructions": ["Fixture: toast the bread.", {"step": "Fixture: layer the ingredients."}, "Fixture: close and serve."], "categories": [{"categories_id":{"name":"Sandwiches"}}] },
+    { "id": "fixture-no-steps", "title": "Recipe without preparation (test fixture)", "ingredients": "Bread\nFilling", "main_image": {"id":"missing-fixture-image"}, "instructions": [] }
+  ]
+}
