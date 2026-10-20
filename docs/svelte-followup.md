@@ -57,3 +57,15 @@ Published code commit: `12673b787c7fd1522bef734f29720d2a9307a88e`; tested/publis
 Browser commands used `AST_BASE_URL=http://127.0.0.1:4331`, with the fixture export served by a cloud loopback server. Final inventory: 0 source `.js` files; all 18 Svelte script blocks typed; no explicit `any` or suppression directives found in application source. Existing non-Svelte SCSS build deprecations are separate, unchanged debt.
 
 Focused last-card screenshots (external demo placeholders fulfilled locally, actual unchanged recipe titles): [320](design/screens/followup-slider-320.png), [768](design/screens/followup-slider-768.png), [1440](design/screens/followup-slider-1440.png). These are implementation evidence, not Paper exports or design approval.
+
+## Hosted browser gate
+
+The follow-up browser job in `.github/workflows/quality.yml` uses Ubuntu 24.04, Python 3.12.10 and the complete pinned Python dependency set in `tests/browser-requirements.txt`. Playwright 1.62.0 installs and launches its matching Chromium revision; CI does not depend on `/usr/bin/chromium` or a local desktop. For a cloud executor with an existing browser, `AST_CHROMIUM_EXECUTABLE` is an explicit optional override.
+
+The 15-minute hosted job builds only against the short-lived fixture CMS and executes `tests/run_browser_ci.py`: hydrated logo/slider/normal-and-reduced-motion/keyboard regressions, the retained recipe suite, and empty/malformed/unavailable state builds and browser assertions. The full-project zero-warning Svelte gate remains in the static job. No assertions were removed, and no live CMS/provider permissions or data are involved. The retained actual-browser zoom script remains a separately verified cloud check; it is not part of this hosted job.
+
+The harness constructs a listening loopback server on an ephemeral port before launching suites. There are no readiness polling loops, sleeps or retries. Child suites/builds have 60/120/180-second bounds. A `finally` block shuts down and closes the server, including on failure. Two executable harness self-checks verify that a failed suite preserves its nonzero result and releases its port, and that an assertion failure creates a real screenshot and readable Playwright trace ZIP.
+
+The job always uploads `work/browser-evidence/` for seven days: suite/build output, loopback server logs, successful regression screenshots and assertion-failure screenshots/traces. Failure capture preserves and re-raises the original exception. Browser contexts restrict requests to the loopback origin; legacy placeholder images may be fulfilled locally. Generated evidence and Python bytecode are ignored by Git.
+
+Cloud harness dry run: fixture build, complete browser/state harness, two failure-path self-checks, dependency-pin resolution, read-only lint and whitespace check all exited 0. The cloud dry run used the explicit system-Chromium override; the hosted job installs and tests the pinned Playwright browser without that override. Hosted results are linked from the PR.

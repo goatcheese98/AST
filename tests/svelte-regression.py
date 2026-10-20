@@ -3,8 +3,9 @@ import os
 import re
 from pathlib import Path
 from playwright.sync_api import sync_playwright
+from browser_support import browser_session, traced_context
 
-out = Path('/workspace/work/ast-followup/screens')
+out = Path(os.environ.get('AST_SVELTE_SCREENSHOTS', '/workspace/work/ast-followup/screens'))
 out.mkdir(parents=True, exist_ok=True)
 base = os.environ.get('AST_BASE_URL', 'http://127.0.0.1:4321')
 
@@ -13,10 +14,9 @@ def luminance(color):
     linear = [v / 12.92 if v <= .04045 else ((v + .055) / 1.055) ** 2.4 for v in rgb]
     return sum(a * b for a, b in zip(linear, [.2126, .7152, .0722]))
 
-with sync_playwright() as p:
-    browser = p.chromium.launch(executable_path='/usr/bin/chromium', args=['--no-sandbox'])
+with sync_playwright() as p, browser_session(p) as browser:
     for motion in ['no-preference', 'reduce']:
-        context = browser.new_context(reduced_motion=motion)
+        context = traced_context(browser, reduced_motion=motion)
         def local_only(route):
             if route.request.url.startswith(base):
                 route.continue_()
@@ -68,5 +68,4 @@ with sync_playwright() as p:
             assert not topdown.evaluate("el => Array.from(el.childNodes).some(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim() === 'svelte')")
             assert not errors, errors
         context.close()
-    browser.close()
 print('Logo/slider: three widths, hydrated/keyboard navigation, normal/reduced motion, no JS errors: passed')

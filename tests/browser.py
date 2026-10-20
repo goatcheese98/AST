@@ -3,13 +3,13 @@ import json
 import os
 from pathlib import Path
 from playwright.sync_api import sync_playwright
+from browser_support import browser_session, traced_context
 
 out = Path(os.environ.get('AST_SCREENSHOTS', '/workspace/work/ast-browser'))
 out.mkdir(parents=True, exist_ok=True)
 base = os.environ.get('AST_BASE_URL', 'http://127.0.0.1:4321')
-with sync_playwright() as p:
-    browser = p.chromium.launch(executable_path='/usr/bin/chromium', headless=True, args=['--no-sandbox'])
-    context = browser.new_context()
+with sync_playwright() as p, browser_session(p) as browser:
+    context = traced_context(browser)
     context.route('**/*', lambda route: route.continue_() if route.request.url.startswith(base) else route.abort())
     page = context.new_page()
     errors = []
@@ -74,14 +74,14 @@ with sync_playwright() as p:
     assert not errors, errors
     assert len(console_errors) <= 1 and all('Failed to load resource' in e for e in console_errors), console_errors
     assert all('missing-fixture-image' in url for url in failed), failed
-    nojs = browser.new_context(java_script_enabled=False)
+    nojs = traced_context(browser, java_script_enabled=False)
     static = nojs.new_page()
     static.goto(base + '/recipes/fixture-blt/')
     assert static.locator('#written-steps li').count() == 3
     assert static.locator('#written-steps').is_visible()
     assert not static.get_by_role('button', name='Explore assembly').is_visible()
     # Block only the lazy native assembly chunk, then exercise its retry path.
-    failure = browser.new_context()
+    failure = traced_context(browser)
     pending = []
     failure.route('**/DetailedSandwichAssembly*.js', lambda route: pending.append(route))
     broken = failure.new_page()
@@ -101,6 +101,5 @@ with sync_playwright() as p:
     broken.get_by_role('link', name='Reload recipe to try again').click()
     broken.get_by_role('button', name='Explore assembly').click()
     broken.get_by_role('button', name='Next step').wait_for()
-    browser.close()
 print(json.dumps({'result':'passed', 'themes':['light','dark'], 'widths':[320,390,768,1024,1440],
     'screenshots':6, 'javascript_errors':errors, 'zoom':'200% CSS reflow', 'expected_missing_image_requests':len(failed)}))
