@@ -5,6 +5,7 @@ import sveltePreprocess from "svelte-preprocess";
 
 // https://astro.build/config
 export default defineConfig({
+  output: 'static',
   site: 'http://localhost:4321',
   integrations: [
     svelte({

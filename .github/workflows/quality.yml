@@ -27,6 +27,35 @@ jobs:
         env:
           PUBLIC_DIRECTUS_URL: ''
       - run: npm run build:fixture
+  cloudflare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      PUBLIC_DIRECTUS_URL: ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.10'
+      - run: npm ci
+      - run: npm run build:fixture
+      - name: Static multi-page routes, 404s, security and cache headers
+        run: python tests/cloudflare_smoke.py
+      - name: Retain Pages smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloudflare-evidence-${{ github.sha }}
+          path: |
+            work/cloudflare-evidence/runtime.log
+            work/cloudflare-evidence/responses.json
+          retention-days: 7
+          if-no-files-found: warn
   browser:
     runs-on: ubuntu-24.04
     timeout-minutes: 15

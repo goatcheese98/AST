@@ -41,7 +41,7 @@ Pristine full Svelte check reported 19 errors and 7 warnings in legacy demos (Fe
 
 ## Cloudflare preparation
 
-Astro's unchanged default rendering mode is static; successful no-CMS and fixture builds generate `dist/` HTML and assets. A future Cloudflare Pages project can use `npm ci && npm run build` with output `dist`, Node 24 and an anonymous CMS base URL if content is desired. No Worker adapter is needed for this static output. No Cloudflare project, secret, deployment, domain or release was created. Error snapshots need a new build after CMS recovery. Review public CMS permissions, live schema, content and candidate design before any production release.
+Astro's rendering mode is explicitly static; successful no-CMS and fixture builds generate `dist/` HTML and assets. A future Cloudflare Pages project can use `npm ci && npm run build` with output `dist`, Node 24 and an anonymous CMS base URL if content is desired. No Worker adapter is needed for this static output. See [security and Pages verification](security-and-pages.md) for the full dependency audit, checked-in Pages headers/configuration and real local Pages route/404/cache smoke gate. No Cloudflare project, secret, deployment, domain or release was created. Error snapshots need a new build after CMS recovery. Review public CMS permissions, live schema, content and candidate design before any production release.
 
 ## Cloud verification results
 
