@@ -31,13 +31,13 @@ python tests/zoom.py
 
 `build:fixture` owns a short-lived loopback CMS, exports the app, then closes the server. `node tests/build-fixture.mjs empty|malformed|unavailable` exercises the other collection states. No fixture mode is included in application runtime. Browser tests check navigation, written text, previous/next/disabled states, keyboard focus/skip link, JS-disabled content, lazy-import failure/recovery, missing image, themes, reduced motion and widths 320/390/768/1024/1440. The main browser suite includes CSS 200% reflow. `tests/zoom.py` additionally sets real Chromium page zoom to 200% through its internal settings API in a dedicated cloud profile, verifies the layout viewport changes from 1440 to 720, and exercises content/assembly controls. Assistive-technology review remains manual. Screenshots alone are not the functional assertion.
 
-CI adds bounded install, fixture tests, strict boundary, full Astro check, changed-Svelte check, read-only ESLint and no-CMS/fixture static builds. Full-repository Svelte checking is separately available as `npm run check:svelte`; legacy demo diagnostics are not hidden by claiming a full TypeScript migration. ESLint is scoped to the typed service/test boundary; Astro and Svelte use their native checkers.
+CI adds bounded install, fixture tests, strict boundary, full Astro check, full warning-free Svelte check, read-only ESLint and no-CMS/fixture static builds. Full-repository Svelte checking is now required in CI as `npm run check:svelte`; the prior slice command remains available. ESLint is scoped to the typed service/test boundary; Astro and Svelte use their native checkers.
 
 ## Baseline and limits
 
 Reproduced baseline `npm ci` exit 1: TypeScript 5.9.3 missing from lock. Repaired the lock and declared check tooling, retaining existing application versions. Pristine baseline with repaired tooling: Astro check 37 errors; build failed because an Astro carousel was given `client:visible`. Repairs add its missing frontmatter, type the timer/direction, align existing demo recipe types, simplify the diagnostic page to normalized typed text and remove invalid Astro hydration.
 
-Pristine full Svelte check reported 19 errors and 7 warnings in legacy demos (FeaturedSlider, SandoHubLogo and other warnings). The final full check retains 19 errors and 5 warnings in 4 files; the changed components pass with zero errors/warnings. Those unrelated demo implementations are outside this slice; changed components have a dedicated strict gate. Existing home/demo SCSS emits deprecation/empty/comment warnings during builds. No blanket Sass/framework upgrade was attempted.
+Pristine full Svelte check reported 19 errors and 7 warnings in legacy demos (FeaturedSlider, SandoHubLogo and other warnings). The first draft retained 19 errors and 5 warnings. The [follow-up](svelte-followup.md) reproduced and resolved all of them: full Svelte now reports zero errors/warnings, with a stronger CI gate. Existing home/demo SCSS emits deprecation/empty/comment warnings during builds. No blanket Sass/framework upgrade was attempted.
 
 ## Cloudflare preparation
 
@@ -45,7 +45,7 @@ Astro's unchanged default rendering mode is static; successful no-CMS and fixtur
 
 ## Cloud verification results
 
-Locked installation, eight focused tests, strict CMS TypeScript, full Astro check, changed-Svelte check, read-only ESLint, no-CMS export and success/empty/malformed/unavailable fixture exports all exited 0. Each collection state was verified in cloud Chromium. The success journey passed both themes at all five widths, keyboard/focus/skip-link and disabled controls, reduced motion, no-JavaScript written content, missing image and lazy assembly loading/error/reload recovery. The home featured-recipe anchor also worked with JavaScript disabled. Only the intentionally missing fixture image generated a failing request on the success journey; no unexpected JavaScript errors occurred.
+Locked installation, eight focused tests, strict CMS TypeScript, full Astro check, full warning-free Svelte check, read-only ESLint, no-CMS export and success/empty/malformed/unavailable fixture exports all exited 0. Each collection state was verified in cloud Chromium. The success journey passed both themes at all five widths, keyboard/focus/skip-link and disabled controls, reduced motion, no-JavaScript written content, missing image and lazy assembly loading/error/reload recovery. The home featured-recipe anchor also worked with JavaScript disabled. Only the intentionally missing fixture image generated a failing request on the success journey; no unexpected JavaScript errors occurred.
 
 Text contrast ratios from the actual canonical colors: light body 17.72:1, muted-on-panel 5.44:1, primary 17.72:1; dark body 16.77:1, muted-on-panel 6.25:1, primary 8.45:1. Focus visibility was asserted in Chromium. Screenshot review covered spacing, wrapping, hierarchy, theme contrast and column stacking.
 
@@ -57,4 +57,4 @@ Implementation screenshots use explicitly marked test ingredients/steps, never p
 | 768 | [PNG](design/screens/recipe-768-light.png) | [PNG](design/screens/recipe-768-dark.png) |
 | 1440 | [PNG](design/screens/recipe-1440-light.png) | [PNG](design/screens/recipe-1440-dark.png) |
 
-Limitations: unapproved Paper candidate; missing original Paper PNG; live schema/content/permissions unverified; 19 existing full-Svelte demo errors; assistive-technology checks outstanding (both real Chromium 200% zoom and CSS 200% reflow passed). No merge, production release or deployment was performed.
+Limitations: unapproved Paper candidate; missing original Paper PNG; live schema/content/permissions unverified; assistive-technology checks outstanding (both real Chromium 200% zoom and CSS 200% reflow passed). No merge, production release or deployment was performed.
