@@ -6,7 +6,8 @@ import type { Recipe } from '../../services/directus';
 export async function getStaticPaths() {
   let recipes: Recipe[] = [];
   try { recipes = await getAllRecipes(); } catch { /* Browse shows a bounded unavailable state. */ }
-  return recipes.map(recipe => ({ params: { id: encodeURIComponent(String(recipe.id)) }, props: { recipe } }));
+  // Astro 6+ matches partially decoded params; keep reserved separators encoded.
+  return recipes.map(recipe => ({ params: { id: decodeURI(encodeURIComponent(String(recipe.id))) }, props: { recipe } }));
 }
 interface Props { recipe: Recipe; }
 const { recipe } = Astro.props;

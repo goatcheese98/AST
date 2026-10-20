@@ -7,6 +7,7 @@ import re
 import signal
 import socket
 import subprocess
+import sys
 import threading
 import time
 import urllib.error
@@ -17,7 +18,7 @@ DIST = ROOT / 'dist'
 EVIDENCE = ROOT / 'work' / 'cloudflare-evidence'
 
 
-def main():
+def main(rendering=False):
     assert (DIST / '404.html').is_file(), 'Top-level 404 prevents implicit SPA fallback'
     assert (DIST / 'recipes/fixture-blt/index.html').is_file(), 'Build fixtures first'
     assert not (DIST / '_worker.js').exists(), 'Expected native static export'
@@ -108,6 +109,9 @@ def main():
         asset = next(DIST.glob('_astro/*.css'))
         check('/' + asset.relative_to(DIST).as_posix(), 200, asset.read_bytes()[:30])
         check('/favicon.svg', 200, b'<svg')
+        if rendering:
+            check('/recipes/73/', 200, b'Numeric recipe')
+            check('/recipes/a%2Fb%20%3F/', 200, b'__cmsXss')
         print(f'PASS: {len(results)} real Pages route/header/cache GET/HEAD checks')
     finally:
         if process.poll() is None:
@@ -128,4 +132,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(rendering='--rendering' in sys.argv)

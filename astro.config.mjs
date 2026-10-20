@@ -1,19 +1,12 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import svelte from "@astrojs/svelte";
-import sveltePreprocess from "svelte-preprocess";
+import svelte from '@astrojs/svelte';
+import pagesRecipeRedirects from './src/integrations/pagesRecipeRedirects';
 
-// https://astro.build/config
 export default defineConfig({
   output: 'static',
+  // Preserve the pre-v7 HTML-aware whitespace behavior.
+  compressHTML: true,
   site: 'http://localhost:4321',
-  integrations: [
-    svelte({
-      preprocess: sveltePreprocess({
-        scss: {
-          // You can add options here if needed, e.g., includePaths
-        },
-      }),
-    }),
-  ]
+  integrations: [svelte(), pagesRecipeRedirects()],
 });

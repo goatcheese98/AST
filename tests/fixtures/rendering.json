@@ -1,0 +1,6 @@
+{
+  "data": [
+    {"id": 73, "title": "Numeric recipe", "instructions": ["Keep numeric CMS IDs as strings in route params."]},
+    {"id": "a/b ?", "title": "<script>globalThis.__cmsXss = true</script>", "short_description": "<img src=x onerror=alert(1)> & quoted content", "ingredients": ["<b>plain ingredient</b>"], "instructions": ["<script>globalThis.__cmsXss = true</script>"]}
+  ]
+}
