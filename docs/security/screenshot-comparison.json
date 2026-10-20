@@ -1,0 +1,123 @@
+{
+  "baseline_head": "511bbeffd53b693f014186ae558fc85709130736",
+  "browser": "same cloud system Chromium; existing screenshot suites, themes and viewport sizes unchanged",
+  "images": [
+    {
+      "image": "recipe-screens/recipe-1440-dark.png",
+      "before_size": [
+        1440,
+        1000
+      ],
+      "after_size": [
+        1440,
+        1000
+      ],
+      "changed_pixels": 0,
+      "maximum_channel_delta": 0
+    },
+    {
+      "image": "recipe-screens/recipe-1440-light.png",
+      "before_size": [
+        1440,
+        1000
+      ],
+      "after_size": [
+        1440,
+        1000
+      ],
+      "changed_pixels": 0,
+      "maximum_channel_delta": 0
+    },
+    {
+      "image": "recipe-screens/recipe-320-dark.png",
+      "before_size": [
+        320,
+        1257
+      ],
+      "after_size": [
+        320,
+        1257
+      ],
+      "changed_pixels": 0,
+      "maximum_channel_delta": 0
+    },
+    {
+      "image": "recipe-screens/recipe-320-light.png",
+      "before_size": [
+        320,
+        1257
+      ],
+      "after_size": [
+        320,
+        1257
+      ],
+      "changed_pixels": 0,
+      "maximum_channel_delta": 0
+    },
+    {
+      "image": "recipe-screens/recipe-768-dark.png",
+      "before_size": [
+        768,
+        1000
+      ],
+      "after_size": [
+        768,
+        1000
+      ],
+      "changed_pixels": 0,
+      "maximum_channel_delta": 0
+    },
+    {
+      "image": "recipe-screens/recipe-768-light.png",
+      "before_size": [
+        768,
+        1000
+      ],
+      "after_size": [
+        768,
+        1000
+      ],
+      "changed_pixels": 0,
+      "maximum_channel_delta": 0
+    },
+    {
+      "image": "svelte-screens/slider-1440.png",
+      "before_size": [
+        1168,
+        430
+      ],
+      "after_size": [
+        1168,
+        430
+      ],
+      "changed_pixels": 0,
+      "maximum_channel_delta": 0
+    },
+    {
+      "image": "svelte-screens/slider-320.png",
+      "before_size": [
+        288,
+        422
+      ],
+      "after_size": [
+        288,
+        422
+      ],
+      "changed_pixels": 0,
+      "maximum_channel_delta": 0
+    },
+    {
+      "image": "svelte-screens/slider-768.png",
+      "before_size": [
+        736,
+        430
+      ],
+      "after_size": [
+        736,
+        430
+      ],
+      "changed_pixels": 0,
+      "maximum_channel_delta": 0
+    }
+  ]
+}

@@ -18,6 +18,8 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
+      - name: Audit runtime and tooling dependencies
+        run: npm audit --audit-level=low --fetch-retries=0 --fetch-timeout=30000
       - run: npm test
       - run: npm run typecheck:cms
       - run: npm run typecheck
@@ -46,6 +48,8 @@ jobs:
       - run: npm run build:fixture
       - name: Static multi-page routes, 404s, security and cache headers
         run: python tests/cloudflare_smoke.py
+      - name: Encoded and numeric recipe routes with escaped CMS rendering
+        run: python tests/rendering-regression.py
       - name: Retain Pages smoke evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -54,6 +58,7 @@ jobs:
           path: |
             work/cloudflare-evidence/runtime.log
             work/cloudflare-evidence/responses.json
+            work/cloudflare-evidence/rendering-build.log
           retention-days: 7
           if-no-files-found: warn
   browser:
