@@ -31,7 +31,7 @@ For v7, `compressHTML: true` explicitly retains HTML-aware whitespace behavior. 
 
 The rewrite target is the encoded directory URL, not `/index.html`, because Pages rejects directory-to-index rules as potential canonicalization loops. Normal numeric/UUID-like IDs need no rule. No wildcard/splat, remote proxy, homepage fallback, adapter or Worker is added. Unknown pages and missing assets keep real 404/no-store behavior. Existing `_redirects` files are never overwritten. Wildcard-like rules, more than 2,000 static rules or lines over 1,000 characters fail the build rather than silently publishing invalid routing. Actual public CMS ID/schema confirmation remains outstanding; these are fixture-verified cases, not claims about private data.
 
-`tests/rendering-regression.py` builds the additional numeric/encoded-ID and hostile-text fixtures, checks the emitted HTML/links and escaped title/instructions, then retains the original 18+2 Pages assertions and verifies GET/HEAD content identity for all twelve additional fixture records (44 assertions total). The existing hosted Pages job executes it and retains its build log and HTTP/runtime evidence. Ordinary builds never use the extra fixture data.
+`tests/rendering-regression.py` builds the additional numeric/encoded-ID and hostile-text fixtures, checks the emitted HTML/links and escaped title/instructions, then retains the original 18+2 Pages assertions and verifies GET/HEAD content identity for all fourteen additional fixture records (48 assertions total). The existing hosted Pages job executes it and retains its build log and HTTP/runtime evidence. Ordinary builds never use the extra fixture data.
 
 ## Security and output comparison
 

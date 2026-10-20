@@ -32,3 +32,17 @@ test('mapping round-trips an exhaustive small alphabet including percent, separa
     assert.equal(readRecipeExportIdentity(row.metadata).key, row.key);
   }
 });
+
+test('direct filenames respect the UTF-8 byte boundary without restricting public IDs', () => {
+  const ids = ['🍞'.repeat(64), 'a'.repeat(256), 'a'.repeat(255), '🍞'.repeat(63) + 'abc'];
+  const exports = recipeExports(ids.map(id => ({ id })));
+  assert.equal(Buffer.byteLength(ids[0], 'utf8'), 256);
+  assert.equal(ids[0].length, 128);
+  for (const [index, row] of exports.entries()) {
+    assert.ok(Buffer.byteLength(row.key, 'utf8') <= 255);
+    assert.equal(recipePath(row.recipe), `/recipes/${encodeURIComponent(ids[index])}/`);
+    assert.deepEqual(readRecipeExportIdentity(row.metadata), { id: ids[index], key: row.key });
+    if (index < 2) assert.match(row.key, /^~[0-9a-z]+$/);
+    else assert.equal(row.key, ids[index]);
+  }
+});

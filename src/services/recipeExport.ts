@@ -3,7 +3,7 @@ import { Buffer } from 'node:buffer';
 export interface RecipeExportIdentity { id: string; key: string; }
 
 function directFilename(value: string): boolean {
-  return value.length > 0 && !['.', '..'].includes(value) &&
+  return value.length > 0 && Buffer.byteLength(value, 'utf8') <= 255 && !['.', '..'].includes(value) &&
     !/[%\\/?:@&=+$,;#\u0000-\u001f\u007f]/.test(value) &&
     value.normalize() === value && !/^~[0-9a-z]+$/.test(value);
 }

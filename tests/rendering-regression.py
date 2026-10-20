@@ -41,6 +41,7 @@ def main():
                    if ''.join(content.headings) == recipe['title']]
         assert len(matches) == 1, f'Recipe must own exactly one export: {recipe["id"]!r}'
         path, content = matches[0]
+        assert len(path.parent.name.encode('utf-8')) <= 255, 'Export key exceeds filesystem byte limit'
         assert ''.join(content.steps) == ''.join(recipe['instructions']), content.steps
         public_url = f'/recipes/{segment}/'
         assert f'href="{public_url}"' in listing, 'Original public recipe URL changed'
