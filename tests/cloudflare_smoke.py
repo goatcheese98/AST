@@ -18,7 +18,7 @@ DIST = ROOT / 'dist'
 EVIDENCE = ROOT / 'work' / 'cloudflare-evidence'
 
 
-def main(rendering=False):
+def main(rendering=False, identities=()):
     assert (DIST / '404.html').is_file(), 'Top-level 404 prevents implicit SPA fallback'
     assert (DIST / 'recipes/fixture-blt/index.html').is_file(), 'Build fixtures first'
     assert not (DIST / '_worker.js').exists(), 'Expected native static export'
@@ -112,6 +112,13 @@ def main(rendering=False):
         if rendering:
             check('/recipes/73/', 200, b'Numeric recipe')
             check('/recipes/a%2Fb%20%3F/', 200, b'__cmsXss')
+            for identity in identities:
+                body = check(identity['public_url'], 200)
+                assert results[-1]['canonical_path'] == identity['public_url'], 'Public URL redirected'
+                assert body == (DIST / identity['export_path']).read_bytes(), (
+                    'Public URL served another recipe', identity)
+                check(identity['public_url'], 200, method='HEAD')
+                assert results[-1]['canonical_path'] == identity['public_url'], 'HEAD URL redirected'
         print(f'PASS: {len(results)} real Pages route/header/cache GET/HEAD checks')
     finally:
         if process.poll() is None:

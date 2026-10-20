@@ -1,7 +1,9 @@
 import type { AstroIntegration } from 'astro';
-import { access, readdir, writeFile } from 'node:fs/promises';
+import { access, readFile, readdir, writeFile } from 'node:fs/promises';
+import { recipePath } from '../services/directus';
+import { readRecipeExportIdentity } from '../services/recipeExport';
 
-/** Preserve recipe URLs when Pages decodes reserved characters before asset lookup. */
+/** Map original public URLs to injective build-only artifact keys. */
 export default function pagesRecipeRedirects(): AstroIntegration {
   return {
     name: 'pages-recipe-redirects',
@@ -10,9 +12,20 @@ export default function pagesRecipeRedirects(): AstroIntegration {
         const entries = await readdir(new URL('recipes/', dir), { withFileTypes: true });
         const rules: string[] = [];
         for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
-          if (!entry.isDirectory() || !entry.name.includes('%')) continue;
-          const source = `/recipes/${encodeURIComponent(decodeURIComponent(entry.name))}/`;
-          const target = `/recipes/${encodeURIComponent(entry.name)}/`;
+          if (!entry.isDirectory()) continue;
+          let html: string;
+          try { html = await readFile(new URL(`recipes/${encodeURIComponent(entry.name)}/index.html`, dir), 'utf8'); } catch (error) {
+            if (error instanceof Error && 'code' in error && error.code === 'ENOENT') continue;
+            throw error;
+          }
+          // The marker is on a real trusted header tag; escaped CMS text cannot supply it.
+          const metadata = html.match(/<header\b[^>]*\bdata-recipe-export="([A-Za-z0-9_-]+)"/)?.[1];
+          if (!metadata) continue;
+          const { id, key } = readRecipeExportIdentity(metadata);
+          if (key !== entry.name) throw new Error('Recipe metadata does not own its export directory');
+          const source = recipePath({ id });
+          const target = `/recipes/${encodeURIComponent(key)}/`;
+          if (source === target) continue;
           if (source.includes('*') || target.includes('*')) {
             throw new Error('A recipe URL cannot be represented as an exact Pages rule');
           }

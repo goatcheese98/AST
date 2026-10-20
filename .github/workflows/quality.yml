@@ -59,6 +59,7 @@ jobs:
             work/cloudflare-evidence/runtime.log
             work/cloudflare-evidence/responses.json
             work/cloudflare-evidence/rendering-build.log
+            work/cloudflare-evidence/recipe-identities.json
           retention-days: 7
           if-no-files-found: warn
   browser:
