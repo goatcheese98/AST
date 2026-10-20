@@ -1,4 +1,4 @@
- svelte <script lang="ts">
+<script lang="ts">
   import { onMount, tick } from 'svelte';
   import gsap from 'gsap';
 
@@ -178,6 +178,7 @@
 </div>
 
 <style lang="scss">
+  @use "sass:color";
   .top-down-sandwich-assembly-container {
     width: 320px; 
     height: 320px;
@@ -203,9 +204,6 @@
     opacity: 0; 
   }
 
-  .plate-visual-top-down {
-    /* Plate styles are inlined */
-  }
 
   .bread-slice-td {
     box-shadow: inset 0 0 8px rgba(0,0,0,0.1); 
@@ -216,7 +214,7 @@
   }
   
   .lettuce-leaf-td {
-     border: 1px solid darken(#7BAF3B, 15%); 
+     border: 1px solid color.adjust(#7BAF3B, $lightness: -15%);
      filter: brightness(0.95) saturate(1.1);
   }
 
@@ -224,9 +222,6 @@
     filter: brightness(1.05);
   }
 
-  .sauce-td {
-    /* Mayo swirl style is inlined */
-  }
 
   .bacon-strip-td {
     background-image: linear-gradient(

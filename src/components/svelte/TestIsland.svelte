@@ -1,5 +1,5 @@
-<script>
-  let message = "Hello from Svelte Island!";
+<script lang="ts">
+  const message: string = "Hello from Svelte Island!";
 </script>
 
 <div>

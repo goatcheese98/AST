@@ -1,0 +1,106 @@
+{
+  "data": [
+    {
+      "id": 73,
+      "title": "Numeric recipe",
+      "instructions": [
+        "Keep numeric CMS IDs as strings in route params."
+      ]
+    },
+    {
+      "id": "a/b ?",
+      "title": "<script>globalThis.__cmsXss = true</script>",
+      "short_description": "<img src=x onerror=alert(1)> & quoted content",
+      "ingredients": [
+        "<b>plain ingredient</b>"
+      ],
+      "instructions": [
+        "<script>globalThis.__cmsXss = true</script>"
+      ]
+    },
+    {
+      "id": "a/b",
+      "title": "Slash identity",
+      "instructions": [
+        "Slash identity instruction"
+      ]
+    },
+    {
+      "id": "a%2Fb",
+      "title": "Literal escape identity",
+      "instructions": [
+        "Literal escape identity instruction"
+      ]
+    },
+    {
+      "id": "100%",
+      "title": "Literal percent identity",
+      "instructions": [
+        "Literal percent identity instruction"
+      ]
+    },
+    {
+      "id": "café🍞",
+      "title": "Unicode identity",
+      "instructions": [
+        "Unicode identity instruction"
+      ]
+    },
+    {
+      "id": "~0061002f0062",
+      "title": "Export-key lookalike identity",
+      "instructions": [
+        "Export-key lookalike instruction"
+      ]
+    },
+    {
+      "id": "%",
+      "title": "Single percent identity",
+      "instructions": [
+        "Single percent instruction"
+      ]
+    },
+    {
+      "id": "a%2fb",
+      "title": "Lowercase literal escape identity",
+      "instructions": [
+        "Lowercase escape instruction"
+      ]
+    },
+    {
+      "id": "café🍞",
+      "title": "Decomposed Unicode identity",
+      "instructions": [
+        "Decomposed Unicode instruction"
+      ]
+    },
+    {
+      "id": "a%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fba%2Fb",
+      "title": "Long literal-percent identity",
+      "instructions": [
+        "Long literal-percent instruction"
+      ]
+    },
+    {
+      "id": "~0",
+      "title": "Short export-key lookalike identity",
+      "instructions": [
+        "Short lookalike instruction"
+      ]
+    },
+    {
+      "id": "🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞",
+      "title": "NFC multibyte filename boundary identity",
+      "instructions": [
+        "Multibyte boundary instruction"
+      ]
+    },
+    {
+      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "title": "ASCII filename boundary identity",
+      "instructions": [
+        "ASCII boundary instruction"
+      ]
+    }
+  ]
+}

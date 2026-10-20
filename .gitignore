@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Browser regression logs, traces and Python bytecode
+/work/
+__pycache__/

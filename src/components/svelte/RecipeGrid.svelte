@@ -36,15 +36,9 @@
 </div>
 
 <style lang="scss">
-  .recipe-grid-container {
-    // Styles for the container if any
-  }
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
-  }
-  .grid-item {
-    // Styles for individual item wrapper if needed
   }
 </style> 
