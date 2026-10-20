@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount } from 'svelte';
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
   import ExpandingRecipeCard from './ExpandingRecipeCard.svelte';
@@ -61,10 +61,10 @@
   ];
 
   let sliderWrapper: HTMLElement;
-  let sliderTrack: HTMLElement;
   let cardElements: HTMLElement[] = [];
 
   onMount(() => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (sliderWrapper && cardElements && cardElements.length > 0) {
       gsap.set(cardElements, { 
         autoAlpha: 0, 
@@ -73,7 +73,7 @@
         scale: 0.9
       });
 
-      gsap.to(cardElements, {
+      const reveal = gsap.to(cardElements, {
         autoAlpha: 1,
         x: 0,
         y: 0,
@@ -86,18 +86,15 @@
           start: 'top 85%', 
         }
       });
+      return () => { reveal.scrollTrigger?.kill(); reveal.kill(); };
     }
-  });
-
-  onDestroy(() => {
-    // Cleanup for auto-scroll if it were active
   });
 </script>
 
 <div class="slider-wrapper" bind:this={sliderWrapper}>
-  <div class="slider-track" bind:this={sliderTrack}>
+  <div class="slider-track">
     {#each featuredRecipes as recipe, i}
-      <ExpandingRecipeCard recipe={recipe} bind:this={cardElements[i]} />
+      <div class="slider-card" bind:this={cardElements[i]}><ExpandingRecipeCard recipe={recipe} /></div>
     {/each}
   </div>
 </div>
@@ -109,7 +106,11 @@
     box-sizing: border-box;
   }
 
+  .slider-card { flex: 0 0 100%; min-width: 0; max-width: 330px; --recipe-card-min-width: 0; }
+
   .slider-wrapper {
+    width: 100%;
+    min-width: 0;
     overflow: hidden; 
     padding: 20px 0;
     user-select: none; 

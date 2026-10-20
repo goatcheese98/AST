@@ -3,15 +3,15 @@
   import gsap from 'gsap';
   import SplitText from 'gsap/SplitText';
 
-  let logoContainerEl;
+  let logoContainerEl: HTMLDivElement;
   let sandoHubText = "Sando Hub";
-  let initialFallTimeline = null;
-  let hoverDistortTimeline = null;
-  let splitInstance = null;
+  let initialFallTimeline: gsap.core.Timeline | null = null;
+  let hoverDistortTimeline: gsap.core.Timeline | null = null;
+  let splitInstance: SplitText | null = null;
   const unifiedBrown = '#5D4037'; 
 
   onMount(() => {
-    console.log('[SandoHubLogo] onMount started');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     if (typeof gsap === 'undefined') {
       console.error('[SandoHubLogo] GSAP is undefined!');
@@ -31,8 +31,8 @@
     }
     console.log('[SandoHubLogo] logoContainerEl is defined:', logoContainerEl);
 
-    const textEl = logoContainerEl.querySelector('.text');
-    const sliceEl = logoContainerEl.querySelector('.slice-effect');
+    const textEl = logoContainerEl.querySelector<HTMLElement>('.text');
+    const sliceEl = logoContainerEl.querySelector<HTMLElement>('.slice-effect');
 
     if (!textEl) {
       console.error('[SandoHubLogo] textEl not found!');
@@ -44,7 +44,7 @@
       console.warn('[SandoHubLogo] sliceEl not found, but this might be okay if only text animation is desired initially.');
     }
 
-    if (textEl.textContent.trim() === "") {
+    if ((textEl.textContent ?? '').trim() === "") {
         console.log('[SandoHubLogo] textEl is empty, setting default text.');
         textEl.textContent = sandoHubText;
     }
@@ -79,7 +79,7 @@
     });
     console.log('[SandoHubLogo] Initial fall timeline created.');
 
-    hoverDistortTimeline = gsap.timeline({
+    const hoverTimeline = gsap.timeline({
       paused: true,
       onReverseComplete: () => {
         if (chars && chars.length > 0) {
@@ -103,8 +103,9 @@
         transformOrigin: "center center"
     });
 
-    hoverDistortTimeline.addLabel("startHoverEffect");
-    hoverDistortTimeline.to(sliceEl, {
+    hoverDistortTimeline = hoverTimeline;
+    hoverTimeline.addLabel("startHoverEffect");
+    hoverTimeline.to(sliceEl, {
       display: 'block',
       duration: 0.3,
       xPercent: 105,
@@ -124,7 +125,7 @@
     const sliceAnimationStartTime = "startHoverEffect+=0.05";
     chars.forEach((char, index) => {
       const distortionDelay = index * 0.03;
-      hoverDistortTimeline.to(char, {
+      hoverTimeline.to(char, {
         duration: 0.4,
         skewX: (Math.random() - 0.5) * 70,
         scale: 1 + Math.random() * 0.7,
@@ -138,9 +139,9 @@
 
     return () => {
       console.log('[SandoHubLogo] onMount cleanup function called.');
-      if (splitInstance) splitInstance.revert();
-      if (initialFallTimeline) initialFallTimeline.kill();
-      if (hoverDistortTimeline) hoverDistortTimeline.kill();
+      initialFallTimeline?.kill();
+      hoverDistortTimeline?.kill();
+      splitInstance?.revert();
       initialFallTimeline = null;
       hoverDistortTimeline = null;
       splitInstance = null;
@@ -157,7 +158,7 @@
         color: unifiedBrown,
         clearProps: "filter,transformOrigin"
       });
-      const sliceEl = logoContainerEl.querySelector('.slice-effect');
+      const sliceEl = logoContainerEl.querySelector<HTMLElement>('.slice-effect');
       if (sliceEl) {
         gsap.set(sliceEl, { opacity: 0, xPercent: -105, scaleY: 0.8, skewX: -30, display: 'none' });
       }
@@ -174,7 +175,7 @@
   }
 </script>
 
-<div bind:this={logoContainerEl} class="sando-hub-logo-container" on:mouseenter={handleMouseEnter} on:mouseleave={handleMouseLeave}>
+<div role="group" aria-label={sandoHubText} bind:this={logoContainerEl} class="sando-hub-logo-container" on:mouseenter={handleMouseEnter} on:mouseleave={handleMouseLeave}>
   <div class="text">{sandoHubText}</div>
   <div class="slice-effect"></div>
 </div>

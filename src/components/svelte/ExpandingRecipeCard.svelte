@@ -9,7 +9,7 @@
     tags: string[];
     prepTime: string;
     cookTime: string;
-    difficulty: string;
+    difficulty?: string;
     servings?: number;
   }
 </script>
@@ -179,7 +179,7 @@
     border: 1px solid #E0E0E0;
     border-radius: 12px;
     padding: 0;
-    min-width: 290px; 
+    min-width: var(--recipe-card-min-width, 290px);
     max-width: 330px; 
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), 
@@ -231,6 +231,12 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1; 
+  }
+
+  .card-title-slider a { color: var(--fg, #18181b); }
+  .card-title-slider a:focus-visible {
+    outline: 2px solid var(--fg, #18181b);
+    outline-offset: 2px;
   }
 
   .card-title-slider {

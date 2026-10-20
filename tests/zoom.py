@@ -1,4 +1,5 @@
 """Verify actual 200% Chromium zoom using a dedicated cloud-only profile."""
+import os
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -17,7 +18,7 @@ with sync_playwright() as p:
             chrome.settingsPrivate.setDefaultZoom(2, () =>
                 resolve(chrome.runtime.lastError?.message ?? 'ok')))''')
         assert result == 'ok', result
-        page.goto('http://127.0.0.1:4321/recipes/fixture-blt/')
+        page.goto(os.environ.get('AST_BASE_URL', 'http://127.0.0.1:4321') + '/recipes/fixture-blt/')
         assert page.evaluate('innerWidth') == 720
         assert page.locator('html').evaluate('(el) => el.scrollWidth <= innerWidth')
         assert page.locator('#written-steps li').count() == 3

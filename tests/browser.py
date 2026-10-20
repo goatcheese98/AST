@@ -6,7 +6,7 @@ from playwright.sync_api import sync_playwright
 
 out = Path(os.environ.get('AST_SCREENSHOTS', '/workspace/work/ast-browser'))
 out.mkdir(parents=True, exist_ok=True)
-base = 'http://127.0.0.1:4321'
+base = os.environ.get('AST_BASE_URL', 'http://127.0.0.1:4321')
 with sync_playwright() as p:
     browser = p.chromium.launch(executable_path='/usr/bin/chromium', headless=True, args=['--no-sandbox'])
     context = browser.new_context()

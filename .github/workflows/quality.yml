@@ -21,7 +21,7 @@ jobs:
       - run: npm test
       - run: npm run typecheck:cms
       - run: npm run typecheck
-      - run: npm run check:svelte:slice
+      - run: npm run check:svelte
       - run: npm run lint
       - run: npm run build
         env:

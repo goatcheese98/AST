@@ -11,7 +11,7 @@
     "typecheck": "astro check",
     "typecheck:cms": "tsc -p tsconfig.cms.json",
     "lint": "eslint src/services tests --max-warnings=0",
-    "check:svelte": "svelte-check --tsconfig ./tsconfig.json",
+    "check:svelte": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
     "build:fixture": "node tests/build-fixture.mjs",
     "check:svelte:slice": "svelte-check --tsconfig ./tsconfig.svelte.json --fail-on-warnings"
   },
