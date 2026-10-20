@@ -1,0 +1,26 @@
+[
+  {
+    "package": "playwright",
+    "version": "1.62.0",
+    "source": "https://pypi.org/pypi/playwright/1.62.0/json",
+    "vulnerabilities": []
+  },
+  {
+    "package": "pyee",
+    "version": "13.0.1",
+    "source": "https://pypi.org/pypi/pyee/13.0.1/json",
+    "vulnerabilities": []
+  },
+  {
+    "package": "greenlet",
+    "version": "3.5.5",
+    "source": "https://pypi.org/pypi/greenlet/3.5.5/json",
+    "vulnerabilities": []
+  },
+  {
+    "package": "typing_extensions",
+    "version": "4.16.0",
+    "source": "https://pypi.org/pypi/typing_extensions/4.16.0/json",
+    "vulnerabilities": []
+  }
+]
